@@ -6,7 +6,7 @@
 
   <groupId>com.tencentcloud.cls</groupId>
   <artifactId>tencentcloud-cls-sdk-java</artifactId>
-  <version>1.1.2</version>
+  <version>1.0.1</version>
 
   <name>tencentcloud-cls-sdk-java</name>
   <!-- FIXME change it to the project's website -->
