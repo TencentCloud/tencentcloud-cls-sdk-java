@@ -10,20 +10,13 @@
 
   <name>tencentcloud-cls-sdk-java</name>
   <!-- FIXME change it to the project's website -->
-  <url>http://www.example.com</url>
+  <url>https://cloud.tencent.com/</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
   </properties>
-
-  <distributionManagement>
-    <repository>
-      <id>tencent_public</id>
-      <url>https://mirrors.tencent.com/repository/maven/tencent_public/</url>
-    </repository>
-  </distributionManagement>
 
   <dependencies>
     <dependency>
@@ -110,4 +103,36 @@
       </plugins>
     </pluginManagement>
   </build>
+  <licenses>
+    <license>
+      <name>Apache License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+      <distribution>repo</distribution>
+      <comments>tencentcloudapi cls java sdk</comments>
+    </license>
+  </licenses>
+  <scm>
+    <connection>scm:git:https://github.com/TencentCloud/tencentcloud-cls-sdk-java.git</connection>
+    <developerConnection>scm:git:https://github.com/TencentCloud/tencentcloud-cls-sdk-java.git</developerConnection>
+    <url>https://github.com/TencentCloud/tencentcloud-cls-sdk-java</url>
+  </scm>
+  <developers>
+    <developer>
+      <id>tencentcloudapi</id>
+      <name>tencentcloudapi</name>
+      <email>tencentcloudapi@tencent.com</email>
+    </developer>
+  </developers>
+  <distributionManagement>
+    <repository>
+      <id>Releases</id>
+      <name>Nexus Release Repository</name>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+    </repository>
+    <snapshotRepository>
+      <id>Releases</id>
+      <name>Nexus Snapshot Repository</name>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+  </distributionManagement>
 </project>
