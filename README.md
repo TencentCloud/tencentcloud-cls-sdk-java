@@ -7,7 +7,7 @@ Tencent CLoud CLS JAVA SDK
 
 ```
     <dependency>
-      <groupId>com.tencentcloud.cls</groupId>
+      <groupId>com.tencentcloudapi.cls</groupId>
       <artifactId>tencentcloud-cls-sdk-java</artifactId>
       <version>1.0.1</version>
     </dependency>
@@ -20,8 +20,6 @@ Tencent CLoud CLS JAVA SDK
 - 感知每一条日志的成功状态： 用户可以自定义CallBack方法的实现，监控每一条日志的状态
 - 使用简单： 通过简单配置，就可以实现复杂的日志上传聚合、失败重试等逻辑
 - 失败重试： 429、500 等服务端错误，都会进行重试， 401、403、404 默认不重试
-
-
 
 ### Demo
 
