@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.tencentcloudapi.cls</groupId>
   <artifactId>tencentcloud-cls-sdk-java</artifactId>
-  <version>1.0.1</version>
+  <version>1.0.2</version>
   <packaging>jar</packaging>
   <name>tencentcloud-cls-sdk-java</name>
   <!-- FIXME change it to the project's website -->
@@ -61,7 +61,6 @@
   </dependencies>
 
   <build>
-    <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
       <plugins>
         <plugin>
           <groupId>org.sonatype.plugins</groupId>
@@ -138,7 +137,6 @@
           </executions>
         </plugin>
       </plugins>
-    </pluginManagement>
   </build>
   <licenses>
     <license>
