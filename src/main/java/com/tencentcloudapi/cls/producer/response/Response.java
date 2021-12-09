@@ -35,8 +35,12 @@ public class Response implements Serializable {
 	 * @return request id
 	 */
 	public String GetRequestId() {
-		List<String> header = GetHeader(Constants.CONST_X_SLS_REQUESTID);
+		List<String> header = GetHeader("X-Cls-Requestid");
 		if (header.isEmpty()) {
+			List<String> header2 = GetHeader(Constants.CONST_X_SLS_REQUESTID);
+			if (!header2.isEmpty()) {
+				return header2.get(0);
+			}
 			return  "";
 		}
 		return header.get(0);
