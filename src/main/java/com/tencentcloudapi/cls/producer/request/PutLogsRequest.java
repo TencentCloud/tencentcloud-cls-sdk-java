@@ -118,6 +118,8 @@ public class PutLogsRequest extends Request {
 	public byte[] GetLogGroupBytes(String sourceIp) {
 		Logs.LogGroupList.Builder grpList = Logs.LogGroupList.newBuilder();
 		this.mlogItems.setFilename(this.mFilename);
+		this.mlogItems.setContextFlow(sourceIp);
+
 		if (this.mSource == null || this.mSource.isEmpty()) {
 			this.mlogItems.setSource(sourceIp);
 		} else {
