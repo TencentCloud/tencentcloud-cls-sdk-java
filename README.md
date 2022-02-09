@@ -9,7 +9,7 @@ Tencent CLoud CLS JAVA SDK
     <dependency>
       <groupId>com.tencentcloudapi.cls</groupId>
       <artifactId>tencentcloud-cls-sdk-java</artifactId>
-      <version>1.0.4</version>
+      <version>1.0.5</version>
     </dependency>
 ```
 

@@ -89,7 +89,8 @@ public class ProducerBatch implements Delayed {
             int batchSizeThresholdInBytes,
             int batchCountThreshold,
             int maxReservedAttempts,
-            long nowMs) {
+            long nowMs
+    ) {
         this.topicId = topicId;
         this.packageId = packageId;
         this.createdMs = nowMs;

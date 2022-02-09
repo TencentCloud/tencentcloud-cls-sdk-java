@@ -68,6 +68,6 @@ public final class Utils {
     }
 
     public static String generatePackageId(String producerHash, AtomicLong batchId) {
-        return producerHash + "-" + Long.toHexString(batchId.getAndIncrement());
+        return  (producerHash + "-" + Long.toHexString(batchId.getAndIncrement())).toUpperCase();
     }
 }

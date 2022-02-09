@@ -158,7 +158,7 @@ public class SendProducerBatchTask implements Runnable {
             Map<String, String> headParameter = getCommonHeadPara();
             request.SetParam(Constants.TOPIC_ID, request.GetTopic());
             Map<String, String> urlParameter = request.GetAllParams();
-            byte[] logBytes = request.GetLogGroupBytes(producerConfig.getSourceIp());
+            byte[] logBytes = request.GetLogGroupBytes(producerConfig.getSourceIp(), batch.getPackageId());
             response = sendLogs(urlParameter, headParameter, logBytes);
             Attempt attempt = new Attempt(true, response.GetRequestId(), "", "", nowMs);
             batch.appendAttempt(attempt);
