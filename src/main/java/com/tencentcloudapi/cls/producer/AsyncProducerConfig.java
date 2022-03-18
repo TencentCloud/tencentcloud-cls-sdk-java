@@ -82,7 +82,7 @@ public class AsyncProducerConfig {
 
     /**
      * 获取Http Type
-     * @return
+     * @return Http Type
      */
     public String getHttpType() {
         return this.httpType;
@@ -90,7 +90,7 @@ public class AsyncProducerConfig {
 
     /**
      * 获取Host Name
-     * @return
+     * @return Host name
      */
     public String getHostName() {
         return this.hostName;
@@ -98,7 +98,7 @@ public class AsyncProducerConfig {
 
     /**
      * 获取Tencent Cloud Secret Id
-     * @return
+     * @return SecretId
      */
     public String getSecretId() {
         return this.secretId;
@@ -106,7 +106,7 @@ public class AsyncProducerConfig {
 
     /**
      * 获取Tencent Cloud Secret Key
-     * @return
+     * @return Secret key
      */
     public String getSecretKey() {
         return this.secretKey;
@@ -114,7 +114,7 @@ public class AsyncProducerConfig {
 
     /**
      * 获取本机Ip， 可以是自己设置的
-     * @return
+     * @return Source ip
      */
     public String getSourceIp() {
         return this.sourceIp;
@@ -149,7 +149,7 @@ public class AsyncProducerConfig {
     /**
      * 获取日志合并最大等待时间
      *
-     * @return
+     * @return Max block ms
      */
     public long getMaxBlockMs() {
         return maxBlockMs;
