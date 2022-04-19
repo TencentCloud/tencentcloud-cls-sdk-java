@@ -30,6 +30,7 @@ public class Sender {
         for (Map.Entry<String, String> entry : requestMessage.getHeaders().entrySet()) {
             connection.setRequestProperty(entry.getKey(), entry.getValue());
         }
+        connection.setRequestProperty("User-Agent", "cls-java-sdk-1.0.8");
 
         outputStream = connection.getOutputStream();
         outputStream.write(requestMessage.getContent());
