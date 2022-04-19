@@ -107,18 +107,26 @@ public class SendProducerBatchTask implements Runnable {
         byte[] compressedData = LZ4Encoder.compressToLhLz4Chunk(body);
         RequestMessage requestMessage = buildRequest(uri, urlParameter, headParameter, compressedData, compressedData.length);
         PutLogsResponse response;
+        String requestId = "";
         try {
             response = Sender.doPost(requestMessage);
+            if (response !=null) {
+                requestId = response.GetRequestId();
+            }
         } catch (Exception e) {
             throw new LogException(ErrorCodes.SendFailed, e.getMessage());
         }
         switch (response.GetHttpStatusCode()) {
             case 200: return response;
-            case 500: throw new LogException(ErrorCodes.INTERNAL_SERVER_ERROR, "internal server error");
-            case 429: throw new LogException(ErrorCodes.SpeedQuotaExceed, "speed quota exceed");
-            default: throw new LogException(ErrorCodes.BAD_RESPONSE, response.GetAllHeaders().toString());
+            case 500: throw new LogException(response.GetHttpStatusCode(), ErrorCodes.BAD_RESPONSE, "internal server error", requestId);
+            case 429: throw new LogException(response.GetHttpStatusCode(), ErrorCodes.SpeedQuotaExceed, "speed quota exceed", requestId);
+            case 413: throw new LogException(response.GetHttpStatusCode(), ErrorCodes.ContentIsTooLarge, "content is too large", requestId);
+            case 404: throw new LogException(response.GetHttpStatusCode(), ErrorCodes.TopicNotExists, "topic not exists", requestId);
+            case 403: throw new LogException(response.GetHttpStatusCode(), ErrorCodes.SingleValueExceed1M, "single log value exceed 1M", requestId);
+            case 401: throw new LogException(response.GetHttpStatusCode(), ErrorCodes.AuthFailure, "auth failed", requestId);
+            case 400: throw new LogException(response.GetHttpStatusCode(), ErrorCodes.InvalidParam, "invalid param", requestId);
+            default: throw new LogException(response.GetHttpStatusCode(), ErrorCodes.BAD_RESPONSE, response.GetAllHeaders().toString(), requestId);
         }
-
     }
 
     /**
@@ -192,7 +200,7 @@ public class SendProducerBatchTask implements Runnable {
             LogException logException = (LogException) e;
             return new Attempt(
                     false,
-                    requestId,
+                    logException.GetRequestId(),
                     logException.GetErrorCode(),
                     logException.GetErrorMessage(),
                     nowMs);

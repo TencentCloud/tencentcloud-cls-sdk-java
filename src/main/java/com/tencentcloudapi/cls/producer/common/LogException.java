@@ -10,6 +10,7 @@ public class LogException extends Exception {
     private int httpCode = -1;
 
     private String errorCode;
+    private String requestId;
 
     /**
      * Construct LogExceptio
@@ -44,6 +45,13 @@ public class LogException extends Exception {
         this.errorCode = code;
     }
 
+    public LogException(int httpCode, String code, String message, String requestId) {
+        super(message);
+        this.httpCode = httpCode;
+        this.errorCode = code;
+        this.requestId= requestId;
+    }
+
     /**
      * Get the error code
      * @return error code
@@ -66,6 +74,10 @@ public class LogException extends Exception {
      */
     public int GetHttpCode() {
         return httpCode;
+    }
+
+    public String GetRequestId() {
+        return requestId;
     }
 
     /**

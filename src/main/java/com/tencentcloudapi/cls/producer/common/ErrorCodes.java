@@ -8,10 +8,17 @@ public final class ErrorCodes {
     private ErrorCodes() {
     }
     public static final String BAD_RESPONSE = "BadResponse";
+
+    public static final String InternalError = "InternalError";
     public static final String ENDPOINT_INVALID = "EndpointInvalid";
     public static final String ENCODING_EXCEPTION = "EncodingException";
     public static final String INTERNAL_SERVER_ERROR = "InternalError";
     public static final String SpeedQuotaExceed = "SpeedQuotaExceed";
     public static final String LogSizeExceed = "LogSizeExceed";
     public static final String SendFailed = "SendFailed";
+    public static final String TopicNotExists = "TopicNotExists";
+    public static final String AuthFailure = "AuthFailure";
+    public static final String SingleValueExceed1M = "SingleValueExceed1M";
+    public static final String ContentIsTooLarge = "ContentIsTooLarge";
+    public static final String InvalidParam = "InvalidParam";
 }
