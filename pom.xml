@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.tencentcloudapi.cls</groupId>
   <artifactId>tencentcloud-cls-sdk-java</artifactId>
-  <version>1.0.8</version>
+  <version>1.0.8-oceanus</version>
   <packaging>jar</packaging>
   <name>tencentcloud-cls-sdk-java</name>
   <!-- FIXME change it to the project's website -->
@@ -36,21 +36,6 @@
       <groupId>com.google.protobuf</groupId>
       <artifactId>protobuf-java-util</artifactId>
       <version>3.15.3</version>
-    </dependency>
-    <dependency>
-      <groupId>ch.qos.logback</groupId>
-      <artifactId>logback-classic</artifactId>
-      <version>1.2.3</version>
-    </dependency>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-      <version>1.7.28</version>
-    </dependency>
-    <dependency>
-      <groupId>ch.qos.logback</groupId>
-      <artifactId>logback-core</artifactId>
-      <version>1.2.3</version>
     </dependency>
     <dependency>
       <groupId>org.lz4</groupId>
