@@ -9,8 +9,6 @@ import com.tencentcloudapi.cls.producer.request.PutLogsRequest;
 import com.tencentcloudapi.cls.producer.response.PutLogsResponse;
 import com.tencentcloudapi.cls.producer.util.LZ4Encoder;
 import com.tencentcloudapi.cls.producer.util.QcloudClsSignature;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -19,8 +17,6 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class SendProducerBatchTask implements Runnable {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(SendProducerBatchTask.class);
 
     private final ProducerBatch batch;
 
@@ -53,12 +49,8 @@ public class SendProducerBatchTask implements Runnable {
     public void run() {
         try {
             sendProducerBatch(System.currentTimeMillis());
-        } catch (Throwable t) {
-            LOGGER.error(
-                    "Uncaught error in send producer batch task, topic_id="
-                            + batch.getTopicId()
-                            + ", e=",
-                    t);
+        } catch (Throwable e) {
+            e.printStackTrace();
         }
     }
 

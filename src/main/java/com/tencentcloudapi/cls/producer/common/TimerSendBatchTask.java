@@ -1,8 +1,6 @@
 package com.tencentcloudapi.cls.producer.common;
 
 import com.tencentcloudapi.cls.producer.AsyncProducerConfig;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
@@ -13,7 +11,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class TimerSendBatchTask extends LogThread{
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(TimerSendBatchTask.class);
+//    private static final Logger LOGGER = LoggerFactory.getLogger(TimerSendBatchTask.class);
 
     private final AsyncProducerConfig producerConfig;
 
@@ -69,7 +67,7 @@ public class TimerSendBatchTask extends LogThread{
             try {
                 doSendBatches();
             } catch (Exception e) {
-                LOGGER.error("Uncaught exception in timer batch send task, e=", e);
+                e.printStackTrace();
             }
         }
     }

@@ -7,8 +7,7 @@ import com.google.common.util.concurrent.SettableFuture;
 import com.tencentcloudapi.cls.producer.Callback;
 import com.tencentcloudapi.cls.producer.Result;
 import com.tencentcloudapi.cls.producer.errors.ResultFailedException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -21,7 +20,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class ProducerBatch implements Delayed {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ProducerBatch.class);
+//    private static final Logger LOGGER = LoggerFactory.getLogger(ProducerBatch.class);
 
     private long nextRetryMs;
 
@@ -181,7 +180,8 @@ public class ProducerBatch implements Delayed {
                     thunk.callback.onCompletion(result);
                 }
             } catch (Exception e) {
-                LOGGER.error("Failed to execute user-provided callback, topic_id={}, e=", topicId, e);
+                e.printStackTrace();
+//                LOGGER.error("Failed to execute user-provided callback, topic_id={}, e=", topicId, e);
             }
         }
     }
@@ -195,7 +195,8 @@ public class ProducerBatch implements Delayed {
                     thunk.future.setException(new ResultFailedException(result));
                 }
             } catch (Exception e) {
-                LOGGER.error("Failed to set future, topic_id={}, e=", topicId, e);
+                e.printStackTrace();
+//                LOGGER.error("Failed to set future, topic_id={}, e=", topicId, e);
             }
         }
     }

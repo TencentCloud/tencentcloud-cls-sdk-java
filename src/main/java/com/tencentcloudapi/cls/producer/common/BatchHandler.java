@@ -1,8 +1,5 @@
 package com.tencentcloudapi.cls.producer.common;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
@@ -14,7 +11,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class BatchHandler extends LogThread {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(BatchHandler.class);
+//    private static final Logger LOGGER = LoggerFactory.getLogger(BatchHandler.class);
 
     private final BlockingQueue<ProducerBatch> batches;
 
@@ -59,7 +56,7 @@ public class BatchHandler extends LogThread {
                 ProducerBatch b = batches.take();
                 handle(b);
             } catch (InterruptedException e) {
-                LOGGER.warn("The batch handler has been interrupted");
+                e.printStackTrace();
             }
         }
     }
@@ -76,7 +73,7 @@ public class BatchHandler extends LogThread {
         try {
             batch.fireCallbacksAndSetFutures();
         } catch (Throwable t) {
-            LOGGER.error("Failed to handle batch, batch={}, e=", batch, t);
+            t.printStackTrace();
         } finally {
             batchCount.decrementAndGet();
             memoryController.release(batch.getCurBatchSizeInBytes());

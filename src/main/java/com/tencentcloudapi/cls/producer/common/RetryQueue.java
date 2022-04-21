@@ -1,8 +1,5 @@
 package com.tencentcloudapi.cls.producer.common;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.DelayQueue;
@@ -11,7 +8,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class RetryQueue {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(RetryQueue.class);
 
     private final DelayQueue<ProducerBatch> retryBatches = new DelayQueue<>();
 
@@ -68,7 +64,7 @@ public class RetryQueue {
             try {
                 batch = retryBatches.poll(timeoutMs, TimeUnit.MILLISECONDS);
             } catch (InterruptedException e) {
-                LOGGER.warn("Interrupted when poll batch from the retry batches");
+                e.printStackTrace();
                 break;
             }
             if (batch == null) {
