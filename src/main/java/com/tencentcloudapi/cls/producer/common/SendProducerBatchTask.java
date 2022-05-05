@@ -224,7 +224,8 @@ public class SendProducerBatchTask implements Runnable {
         if (e instanceof LogException) {
             LogException logException = (LogException) e;
             return (logException.GetErrorCode().equals(ErrorCodes.SendFailed) ||
-                    logException.GetErrorCode().equals(ErrorCodes.SpeedQuotaExceed)
+                    logException.GetErrorCode().equals(ErrorCodes.SpeedQuotaExceed) ||
+                    logException.GetErrorCode().equals(ErrorCodes.BAD_RESPONSE)
             );
         }
         return false;
