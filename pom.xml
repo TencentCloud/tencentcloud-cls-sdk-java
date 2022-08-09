@@ -82,11 +82,11 @@
               <relocations>
                 <relocation>
                   <pattern>com.google.guava</pattern>
-                  <shadedPattern>com.shade.google.guava</shadedPattern>
+                  <shadedPattern>com.shade.tencent.google.guava</shadedPattern>
                 </relocation>
                 <relocation>
                   <pattern>com.google.common</pattern>
-                  <shadedPattern>com.shade.google.common</shadedPattern>
+                  <shadedPattern>com.shade.tencent.google.common</shadedPattern>
                 </relocation>
               </relocations>
               <shadedClassifierName>jar-with-dependencies</shadedClassifierName>
