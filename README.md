@@ -30,7 +30,7 @@ https://cloud.tencent.com/document/product/614/18940
 
 ```
 public static void main(String[] args) {
-        String endpoint = "ap-guangzhou.cls.tencentcs.com";
+        String endpoint = "ap-guangzhou.cls.tencentcs.com";  【使用日志服务API2017的域名】
         // API密钥 secretId，必填
         String secretId = "";
         // API密钥 secretKey，必填
