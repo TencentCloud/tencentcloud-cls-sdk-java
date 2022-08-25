@@ -21,6 +21,11 @@ Tencent CLoud CLS JAVA SDK
 - 使用简单： 通过简单配置，就可以实现复杂的日志上传聚合、失败重试等逻辑
 - 失败重试： 429、500 等服务端错误，都会进行重试， 401、403、404 默认不重试
 
+### CLS Host
+
+使用日志服务API2017的域名
+https://cloud.tencent.com/document/product/614/18940
+
 ### Demo
 
 ```
