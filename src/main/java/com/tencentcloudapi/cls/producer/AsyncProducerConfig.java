@@ -20,6 +20,8 @@ public class AsyncProducerConfig {
 
     private String secretKey;
 
+    private String secretToken;
+
     private String sourceIp;
 
     private String topicId;
@@ -51,7 +53,7 @@ public class AsyncProducerConfig {
      * @param secretKey tencent cloud secretKey
      * @param sourceIp 本机ip，
      */
-    public AsyncProducerConfig(@Nonnull String endpoint, @Nonnull String secretId, @Nonnull String secretKey, String sourceIp) {
+    public AsyncProducerConfig(@Nonnull String endpoint, @Nonnull String secretId, @Nonnull String secretKey, String sourceIp, String secretToken) {
         Args.notNullOrEmpty(endpoint, "endpoint");
         Args.notNullOrEmpty(secretId, "secretId");
         Args.notNullOrEmpty(secretKey, "secretKey");
@@ -77,6 +79,11 @@ public class AsyncProducerConfig {
         this.sourceIp = sourceIp;
         if (sourceIp == null || sourceIp.isEmpty()) {
             this.sourceIp = NetworkUtils.getLocalMachineIP();
+        }
+
+        this.secretToken = secretToken;
+        if (null == this.secretToken || this.secretToken.isEmpty()) {
+            this.secretToken = "";
         }
     }
 
@@ -110,6 +117,28 @@ public class AsyncProducerConfig {
      */
     public String getSecretKey() {
         return this.secretKey;
+    }
+
+    /**
+     * 获取Tencent Cloud Secret Token
+     * @return
+     */
+    public String getSecretToken() {
+        return this.secretToken;
+    }
+
+    /**
+     * @param accessKeyId
+     * @param accessKeySecret
+     * @param securityToken
+     */
+    public void resetSecurityToken(String accessKeyId, String accessKeySecret, String securityToken) {
+        Args.notNullOrEmpty(accessKeyId, "secretId");
+        Args.notNullOrEmpty(accessKeySecret, "secretKey");
+        Args.notNullOrEmpty(securityToken, "secretToken");
+        this.secretId = accessKeyId;
+        this.secretKey = accessKeySecret;
+        this.secretToken = securityToken;
     }
 
     /**
