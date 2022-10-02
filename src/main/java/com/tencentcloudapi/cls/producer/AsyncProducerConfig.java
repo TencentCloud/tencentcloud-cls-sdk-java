@@ -53,6 +53,42 @@ public class AsyncProducerConfig {
      * @param secretKey tencent cloud secretKey
      * @param sourceIp 本机ip，
      */
+    public AsyncProducerConfig(@Nonnull String endpoint, @Nonnull String secretId, @Nonnull String secretKey, String sourceIp) {
+        Args.notNullOrEmpty(endpoint, "endpoint");
+        Args.notNullOrEmpty(secretId, "secretId");
+        Args.notNullOrEmpty(secretKey, "secretKey");
+        if (endpoint.startsWith("http://")) {
+            this.hostName = endpoint.substring(7);
+            this.httpType = "http://";
+        } else if (endpoint.startsWith("https://")) {
+            this.hostName = endpoint.substring(8);
+            this.httpType = "https://";
+        } else {
+            this.hostName = endpoint;
+            this.httpType = "http://";
+        }
+        while (this.hostName.endsWith("/")) {
+            this.hostName = this.hostName.substring(0, this.hostName.length() - 1);
+        }
+        if (NetworkUtils.isIPAddr(this.hostName)) {
+            throw new IllegalArgumentException("EndpointInvalid", new Exception("The ip address is not supported"));
+        }
+
+        this.secretId = secretId;
+        this.secretKey = secretKey;
+        this.sourceIp = sourceIp;
+        if (sourceIp == null || sourceIp.isEmpty()) {
+            this.sourceIp = NetworkUtils.getLocalMachineIP();
+        }
+    }
+
+    /**
+     * New Async Client Config
+     * @param endpoint tencent cloud cls endpoint
+     * @param secretId tencent cloud secretId
+     * @param secretKey tencent cloud secretKey
+     * @param sourceIp 本机ip，
+     */
     public AsyncProducerConfig(@Nonnull String endpoint, @Nonnull String secretId, @Nonnull String secretKey, String sourceIp, String secretToken) {
         Args.notNullOrEmpty(endpoint, "endpoint");
         Args.notNullOrEmpty(secretId, "secretId");
