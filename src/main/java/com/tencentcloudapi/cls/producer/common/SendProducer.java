@@ -1,7 +1,8 @@
 package com.tencentcloudapi.cls.producer.common;
 
-import com.google.common.math.LongMath;
 import com.tencentcloudapi.cls.producer.AsyncProducerConfig;
+import com.tencentcloudapi.cls.producer.Result;
+import com.tencentcloudapi.cls.producer.errors.LogSizeTooLargeException;
 import com.tencentcloudapi.cls.producer.http.client.Sender;
 import com.tencentcloudapi.cls.producer.http.comm.HttpMethod;
 import com.tencentcloudapi.cls.producer.http.comm.RequestMessage;
@@ -11,55 +12,23 @@ import com.tencentcloudapi.cls.producer.util.LZ4Encoder;
 import com.tencentcloudapi.cls.producer.util.QcloudClsSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.*;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-public class SendProducerBatchTask implements Runnable {
 
+public class SendProducer {
     private static final Logger LOGGER = LoggerFactory.getLogger(SendProducerBatchTask.class);
-
-    private final ProducerBatch batch;
 
     private final AsyncProducerConfig producerConfig;
 
-    private final RetryQueue retryQueue;
-
-    private final BlockingQueue<ProducerBatch> successQueue;
-
-    private final BlockingQueue<ProducerBatch> failureQueue;
-
-    private final AtomicInteger batchCount;
-
-    public SendProducerBatchTask(
-            ProducerBatch batch,
-            AsyncProducerConfig producerConfig,
-            RetryQueue retryQueue,
-            BlockingQueue<ProducerBatch> successQueue,
-            BlockingQueue<ProducerBatch> failureQueue,
-            AtomicInteger batchCount) {
-        this.batch = batch;
+    public SendProducer(AsyncProducerConfig producerConfig) {
         this.producerConfig = producerConfig;
-        this.retryQueue = retryQueue;
-        this.successQueue = successQueue;
-        this.failureQueue = failureQueue;
-        this.batchCount = batchCount;
-    }
-
-    @Override
-    public void run() {
-        try {
-            sendProducerBatch(System.currentTimeMillis());
-        } catch (Throwable t) {
-            LOGGER.error(
-                    "Uncaught error in send producer batch task, topic_id="
-                            + batch.getTopicId()
-                            + ", e=",
-                    t);
-        }
     }
 
     private Map<String, String> getCommonHeadPara() {
@@ -72,17 +41,18 @@ public class SendProducerBatchTask implements Runnable {
 
     /**
      * buildPutLogsRequest
-     * @param batch ProducerBatch
-     * @return  PutLogsRequest
+     * @param logItems
+     * @param topicID
+     * @return
      */
-    private PutLogsRequest buildPutLogsRequest(ProducerBatch batch) {
-        List<LogItem> list = batch.getLogItems();
+    private PutLogsRequest buildPutLogsRequest(List<LogItem> logItems, String topicID) {
         Logs.LogGroup.Builder logGroup = Logs.LogGroup.newBuilder();
-        for(LogItem tmp:list){
+        for(LogItem tmp:logItems){
             logGroup.addLogs(tmp.mContents);
         }
-        return new PutLogsRequest(batch.getTopicId(), producerConfig.getSourceIp(), "", logGroup);
+        return new PutLogsRequest(topicID, producerConfig.getSourceIp(), "", logGroup);
     }
+
 
     /**
      * 构造报文，发送日志
@@ -164,42 +134,6 @@ public class SendProducerBatchTask implements Runnable {
         return request;
     }
 
-    private void sendProducerBatch(long nowMs) throws InterruptedException {
-        PutLogsResponse response = null;
-        try {
-            PutLogsRequest request = buildPutLogsRequest(batch);
-            Map<String, String> headParameter = getCommonHeadPara();
-            request.SetParam(Constants.TOPIC_ID, request.GetTopic());
-            Map<String, String> urlParameter = request.GetAllParams();
-            byte[] logBytes = request.GetLogGroupBytes(producerConfig.getSourceIp(), batch.getPackageId());
-            response = sendLogs(urlParameter, headParameter, logBytes);
-            Attempt attempt = new Attempt(true, response.GetRequestId(), "", "", nowMs);
-            batch.appendAttempt(attempt);
-            successQueue.put(batch);
-        } catch (Exception e) {
-            String requestId = "";
-            if (response !=null) {
-                requestId = response.GetRequestId();
-            }
-            Attempt attempt = buildAttempt(e, nowMs, requestId);
-            batch.appendAttempt(attempt);
-            if (meetFailureCondition(e)) {
-                failureQueue.put(batch);
-            } else {
-                long retryBackoffMs = calculateRetryBackoffMs();
-                batch.setNextRetryMs(System.currentTimeMillis() + retryBackoffMs);
-                try {
-                    retryQueue.put(batch);
-                } catch (IllegalStateException e1) {
-                    if (retryQueue.isClosed()) {
-                        failureQueue.put(batch);
-                    }
-                }
-            }
-        }
-
-    }
-
     private Attempt buildAttempt(Exception e, long nowMs, String requestId) {
         if (e instanceof LogException) {
             LogException logException = (LogException) e;
@@ -214,35 +148,34 @@ public class SendProducerBatchTask implements Runnable {
         }
     }
 
-    private boolean meetFailureCondition(Exception e) {
-        if (!isRetrievableException(e)) {
-            return true;
+    private void ensureValidLogSize(int sizeInBytes) throws LogSizeTooLargeException {
+        if (sizeInBytes > Constants.MAX_BATCH_SIZE_IN_BYTES) {
+            throw new LogSizeTooLargeException(
+                    "the logs is "
+                            + sizeInBytes
+                            + " bytes which is larger than MAX_BATCH_SIZE_IN_BYTES "
+                            + Constants.MAX_BATCH_SIZE_IN_BYTES);
         }
-        if (retryQueue.isClosed()) {
-            return true;
+        if (sizeInBytes > producerConfig.getTotalSizeInBytes()) {
+            throw new LogSizeTooLargeException(
+                    "the logs is "
+                            + sizeInBytes
+                            + " bytes which is larger than the totalSizeInBytes you specified");
         }
-        return (batch.getRetries() >= producerConfig.getRetries()
-                && failureQueue.size() <= batchCount.get() / 2);
     }
 
-    private boolean isRetrievableException(Exception e) {
-        if (e instanceof LogException) {
-            LogException logException = (LogException) e;
-            return (logException.GetErrorCode().equals(ErrorCodes.SendFailed) ||
-                    logException.GetErrorCode().equals(ErrorCodes.SpeedQuotaExceed) ||
-                    logException.GetErrorCode().equals(ErrorCodes.BAD_RESPONSE)
-            );
-        }
-        return false;
+    public Result sendProducer(long nowMs, String topicID, List<LogItem> logItems) throws LogException, LogSizeTooLargeException {
+        int sizeInBytes = LogSizeCalculator.calculate(logItems);
+        ensureValidLogSize(sizeInBytes);
+        List<Attempt> attempts = new ArrayList<>();
+        PutLogsRequest request = buildPutLogsRequest(logItems, topicID);
+        Map<String, String> headParameter = getCommonHeadPara();
+        request.SetParam(Constants.TOPIC_ID, request.GetTopic());
+        Map<String, String> urlParameter = request.GetAllParams();
+        byte[] logBytes = request.GetLogGroupBytes(producerConfig.getSourceIp(), "");
+        PutLogsResponse response = sendLogs(urlParameter, headParameter, logBytes);
+        Attempt attempt = new Attempt(true, response.GetRequestId(), "", "", nowMs);
+        attempts.add(attempt);
+        return new Result(true, attempts, 1);
     }
-
-    private long calculateRetryBackoffMs() {
-        int retry = batch.getRetries();
-        long retryBackoffMs = producerConfig.getBaseRetryBackoffMs() * LongMath.pow(2, retry);
-        if (retryBackoffMs <= 0) {
-            retryBackoffMs = producerConfig.getMaxRetryBackoffMs();
-        }
-        return Math.min(retryBackoffMs, producerConfig.getMaxRetryBackoffMs());
-    }
-
 }

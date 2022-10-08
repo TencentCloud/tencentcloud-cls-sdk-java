@@ -35,6 +35,8 @@ public class AsyncProducerClient {
 
     private final BatchHandler failureBatchHandler;
 
+    private final SendProducer sendProducer;
+
     private final AtomicInteger batchCount = new AtomicInteger(0);
 
     /**
@@ -116,6 +118,7 @@ public class AsyncProducerClient {
                         this.batchCount,
                         this.memoryController);
 
+        this.sendProducer = new SendProducer(this.producerConfig);
         this.timerSendBatchTask.start();
         this.successBatchHandler.start();
         this.failureBatchHandler.start();
@@ -136,6 +139,25 @@ public class AsyncProducerClient {
             List<LogItem> logItems,
             Callback callback)
             throws InterruptedException, ProducerException {
+        checkParam(topicId, logItems);
+        return accumulator.append(topicId, logItems, callback);
+    }
+
+
+    /**
+     *
+     * @param topicId
+     * @param logItems
+     * @return
+     * @throws ProducerException
+     * @throws LogException
+     */
+    public Result putLogs(String topicId, List<LogItem> logItems) throws ProducerException, LogException {
+        checkParam(topicId, logItems);
+        return this.sendProducer.sendProducer(System.currentTimeMillis(), topicId, logItems);
+    }
+
+    private void checkParam(String topicId, List<LogItem> logItems) throws MaxBatchCountExceedException {
         if (topicId == null || topicId.isEmpty()) {
             throw new IllegalArgumentException("topicIDInvalid", new Exception("topic id cannot be empty"));
         }
@@ -150,7 +172,6 @@ public class AsyncProducerClient {
                             + " which exceeds the MAX_BATCH_COUNT "
                             + Constants.MAX_BATCH_COUNT);
         }
-        return accumulator.append(topicId, logItems, callback);
     }
 
     public void close() throws InterruptedException, ProducerException {
