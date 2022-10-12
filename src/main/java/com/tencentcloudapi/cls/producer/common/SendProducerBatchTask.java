@@ -103,10 +103,10 @@ public class SendProducerBatchTask implements Runnable {
         headParameter.put(Constants.CONST_AUTHORIZATION, signature);
         headParameter.put("x-cls-compress-type", "lz4");
 
-        if (!producerConfig.getSecretToken().isEmpty()) {
+        if (null != producerConfig.getSecretToken() && !producerConfig.getSecretToken().isEmpty()) {
             headParameter.put("X-Cls-Token", producerConfig.getSecretToken());
         }
-        headParameter.put("cls-java-sdk-version", "1.0.11");
+        headParameter.put("cls-java-sdk-version", "1.0.12");
 
         URI uri = getHostURI();
         byte[] compressedData = LZ4Encoder.compressToLhLz4Chunk(body);
