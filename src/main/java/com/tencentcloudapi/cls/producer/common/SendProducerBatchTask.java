@@ -106,7 +106,7 @@ public class SendProducerBatchTask implements Runnable {
         if (null != producerConfig.getSecretToken() && !producerConfig.getSecretToken().isEmpty()) {
             headParameter.put("X-Cls-Token", producerConfig.getSecretToken());
         }
-        headParameter.put("cls-java-sdk-version", "1.0.12");
+        headParameter.put("cls-java-sdk-version", "1.0.13");
 
         URI uri = getHostURI();
         byte[] compressedData = LZ4Encoder.compressToLhLz4Chunk(body);
