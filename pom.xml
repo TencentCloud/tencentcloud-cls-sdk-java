@@ -82,13 +82,10 @@
                             </filters>
                             <relocations>
                                <relocation>
-                                    <pattern>com.google.guava</pattern>
-                                    <shadedPattern>org.shaded.tencent.ieg.guava</shadedPattern>
+                                    <pattern>com.google</pattern>
+                                    <shadedPattern>org.shaded.tencent.ieg.google</shadedPattern>
                                 </relocation>
-                                <relocation>
-                                    <pattern>com.google.protobuf</pattern>
-                                    <shadedPattern>org.shaded.tencent.ieg.protobuf</shadedPattern>
-                                </relocation>
+                                
                             </relocations>
                             <transformers>
                                 <transformer
