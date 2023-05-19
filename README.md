@@ -23,8 +23,7 @@ Tencent CLoud CLS JAVA SDK
 
 ### CLS Host
 
-使用日志服务API2017的域名
-https://cloud.tencent.com/document/product/614/18940
+endpoint填写请参考[可用地域](https://cloud.tencent.com/document/product/614/18940#.E5.9F.9F.E5.90.8D)中 **API上传日志** Tab中的域名![image-20230403191435319](https://github.com/TencentCloud/tencentcloud-cls-sdk-js/blob/main/demo.png)
 
 ### Demo
 
