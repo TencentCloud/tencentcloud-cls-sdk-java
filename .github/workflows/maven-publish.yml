@@ -18,7 +18,6 @@ jobs:
         java-version: '11'
         distribution: 'adopt'
         server-id: Releases # Value of the distributionManagement/repository/id field of the pom.xml
-        gpg-private-key: ${{ secrets.OSSRH_GPG_SECRET_KEY }}
         server-username: MAVEN_USERNAME
         server-password: MAVEN_PASSWORD
     - name: Configure GPG Key
