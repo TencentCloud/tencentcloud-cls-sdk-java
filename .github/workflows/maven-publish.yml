@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 jobs:
   publish:
-    runs-on: ubuntu-latest
+    runs-on: 'temurin'
     steps:
     - uses: actions/checkout@v3
     - name: Set up JDK 11
@@ -18,15 +18,14 @@ jobs:
         java-version: '11'
         distribution: 'adopt'
         server-id: Releases # Value of the distributionManagement/repository/id field of the pom.xml
+        gpg-private-key: ${{ secrets.OSSRH_GPG_SECRET_KEY }}
         server-username: MAVEN_USERNAME
         server-password: MAVEN_PASSWORD
     - name: Configure GPG Key
       run: |
         cat <(echo -e "${{ secrets.OSSRH_GPG_SECRET_KEY }}") | gpg --batch --import
-      env:
-        GPG_SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
     - name: Publish package
-      run: mvn --no-transfer-progress --batch-mode clean deploy
+      run: mvn --batch-mode clean deploy
       env:
         MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
         MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
