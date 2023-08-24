@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 jobs:
   publish:
-    runs-on: 'temurin'
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
     - name: Set up JDK 11
@@ -24,6 +24,7 @@ jobs:
     - name: Configure GPG Key
       run: |
         cat <(echo -e "${{ secrets.OSSRH_GPG_SECRET_KEY }}") | gpg --batch --import
+        gpg --list-secret-keys --keyid-format LONG
     - name: Publish package
       run: mvn --batch-mode clean deploy
       env:
