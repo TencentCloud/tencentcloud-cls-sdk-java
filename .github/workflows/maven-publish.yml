@@ -22,11 +22,6 @@ jobs:
         server-password: MAVEN_PASSWORD
         gpg-private-key: ${{ secrets.OSSRH_GPG_SECRET_KEY }}
         gpg-passphrase: MAVEN_GPG_PASSPHRASE
-    #- name: Configure GPG Key
-    #  run: |
-    #    cat <(echo -e "${{ secrets.OSSRH_GPG_SECRET_KEY }}") | gpg --batch --import
-    #    gpg --list-secret-keys --keyid-format LONG
-    #    mkdir -p ~/.gnupg && echo "use-agent\r\npinentry-mode loopback" >> ~/.gnupg/gpg.conf && echo "allow-loopback-pinentry" >> ~/.gnupg/gpg-agent.conf && echo RELOADAGENT | gpg-connect-agent
     - name: Publish package
       run: mvn --batch-mode clean deploy
       env:
