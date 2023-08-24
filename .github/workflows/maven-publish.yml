@@ -22,7 +22,7 @@ jobs:
         server-password: MAVEN_PASSWORD
     - name: Configure GPG Key
       run: |
-        set -x GPG_TTY (tty) && echo -n "$GPG_SIGNING_KEY" | base64 --decode | gpg --import
+        echo "use-agent\npinentry-mode loopback" >> ~/.gnupg/gpg.conf && echo "allow-loopback-pinentry" >> ~/.gnupg/gpg-agent.conf && echo RELOADAGENT | gpg-connect-agent && echo -n "$GPG_SIGNING_KEY" | base64 --decode | gpg --import
       env:
         GPG_SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
     - name: Publish package
