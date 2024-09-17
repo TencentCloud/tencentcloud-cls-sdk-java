@@ -179,6 +179,11 @@ public class ProducerBatch implements Delayed {
             try {
                 if (thunk.callback != null) {
                     thunk.callback.onCompletion(result);
+                } else {
+                    if (result.isSuccessful() == false) {
+                        LOGGER.warn("send log to cls failed. topic_id={}, error_code={}, error_message={}",
+                                topicId, result.getErrorCode(), result.getErrorMessage() );
+                    }
                 }
             } catch (Exception e) {
                 LOGGER.error("Failed to execute user-provided callback, topic_id={}, e=", topicId, e);

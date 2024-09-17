@@ -143,6 +143,21 @@ public class AsyncProducerClient {
         return accumulator.append(topicId, logItems, callback);
     }
 
+    /**
+     * 写入日志
+     *
+     * @param topicId  Tencent Cloud CLS Topic ID
+     * @param log 单条日志
+     * @return ListenableFuture<Result>
+     * @throws InterruptedException error
+     * @throws ProducerException    error
+     */
+    public ListenableFuture<Result> putLog(String topicId, LogItem log) throws InterruptedException, ProducerException {
+        List<LogItem> logItems = new ArrayList<>();
+        logItems.add(log);
+        checkParam(topicId, logItems);
+        return accumulator.append(topicId, logItems, null);
+    }
 
     /**
      *
