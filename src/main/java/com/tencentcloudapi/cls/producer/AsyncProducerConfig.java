@@ -1,6 +1,8 @@
 package com.tencentcloudapi.cls.producer;
 
 import com.tencentcloudapi.cls.producer.common.Constants;
+import com.tencentcloudapi.cls.producer.common.NetworkTypeToDomainMap;
+import com.tencentcloudapi.cls.producer.common.RegionToDomainMap;
 import com.tencentcloudapi.cls.producer.util.Args;
 import com.tencentcloudapi.cls.producer.util.NetworkUtils;
 
@@ -48,13 +50,19 @@ public class AsyncProducerConfig {
 
     /**
      * New Async Client Config
-     * @param endpoint tencent cloud cls endpoint
+     * @param endpoint tencent cloud cls endpoint 如果不为空，使用改值；如果为空，则根据region和networkType自动获取
      * @param secretId tencent cloud secretId
      * @param secretKey tencent cloud secretKey
      * @param sourceIp 本机ip，
+     * @param region 地域
+     * @param networkType 网络类型
      */
-    public AsyncProducerConfig(@Nonnull String endpoint, @Nonnull String secretId, @Nonnull String secretKey, String sourceIp) {
-        Args.notNullOrEmpty(endpoint, "endpoint");
+    public AsyncProducerConfig(String endpoint, @Nonnull String secretId, @Nonnull String secretKey, String sourceIp, String region, String networkType)  {
+        if (!Args.isNotNullOrEmpty(endpoint)) {
+            Args.notNullOrEmpty(region, "endpoint or region");
+            Args.notNullOrEmpty(networkType, "endpoint or network type");
+            endpoint = getEndpointByRegionAndNetworkType(region, networkType);
+        }
         Args.notNullOrEmpty(secretId, "secretId");
         Args.notNullOrEmpty(secretKey, "secretKey");
         if (endpoint.startsWith("http://")) {
@@ -335,5 +343,17 @@ public class AsyncProducerConfig {
                     "maxRetryBackoffMs must be greater than 0, got " + maxRetryBackoffMs);
         }
         this.maxRetryBackoffMs = maxRetryBackoffMs;
+    }
+
+    public String getEndpointByRegionAndNetworkType(String region, String networkType) {
+        String endpointPrefix = RegionToDomainMap.getRegionToDomainMap().get(region);
+        if (endpointPrefix == null) {
+            throw new IllegalArgumentException("[" + region + "] not exist!");
+        }
+        String endpointSuffix = NetworkTypeToDomainMap.getNetworkTypeToDomainMap().get(networkType);
+        if (endpointSuffix == null) {
+            throw new IllegalArgumentException("[" + networkType + "] not exist!");
+        }
+        return endpointPrefix + "." + endpointSuffix;
     }
 }
