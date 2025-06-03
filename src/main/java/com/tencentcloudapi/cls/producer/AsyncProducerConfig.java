@@ -98,9 +98,20 @@ public class AsyncProducerConfig {
      * @param secretId tencent cloud secretId
      * @param secretKey tencent cloud secretKey
      * @param sourceIp 本机ip，
+     * @param secretToken
+     * @param region 地域
+     * @param networkType 网络类型
      */
-    public AsyncProducerConfig(@Nonnull String endpoint, @Nonnull String secretId, @Nonnull String secretKey, String sourceIp, String secretToken) {
-        Args.notNullOrEmpty(endpoint, "endpoint");
+    public AsyncProducerConfig(@Nonnull String endpoint, @Nonnull String secretId, @Nonnull String secretKey, String sourceIp, String secretToken, Constants.Region region, Constants.NetworkType networkType) {
+        if (region == null) {
+            Args.notNullOrEmpty(endpoint, "endpoint/region");
+        }
+        if (networkType == null) {
+            Args.notNullOrEmpty(endpoint, "endpoint/network type");
+        }
+        if (Args.isNullOrEmpty(endpoint)) {
+            endpoint = getEndpointByRegionAndNetworkType(region, networkType);
+        }
         Args.notNullOrEmpty(secretId, "secretId");
         Args.notNullOrEmpty(secretKey, "secretKey");
         if (endpoint.startsWith("http://")) {
