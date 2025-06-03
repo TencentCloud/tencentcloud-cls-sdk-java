@@ -50,7 +50,7 @@ public class AsyncProducerConfig {
 
     /**
      * New Async Client Config
-     * @param endpoint tencent cloud cls endpoint 如果不为空，使用改值；如果为空，则根据region和networkType自动获取
+     * @param endpoint tencent cloud cls endpoint 如果不为空，使用该值；如果为空，则根据region和networkType自动获取
      * @param secretId tencent cloud secretId
      * @param secretKey tencent cloud secretKey
      * @param sourceIp 本机ip，
