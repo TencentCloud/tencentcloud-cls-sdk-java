@@ -42,10 +42,10 @@ public final class Args {
         }
     }
 
-    public static boolean isNotNullOrEmpty(final String value) {
+    public static boolean isNullOrEmpty(final String value) {
         if (value == null || value.isEmpty()) {
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 }

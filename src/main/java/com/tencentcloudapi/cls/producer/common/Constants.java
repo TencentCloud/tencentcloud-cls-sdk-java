@@ -30,6 +30,63 @@ public class Constants {
         }
     }
 
+    public enum Region {
+        BEIJING("ap-beijing"),
+        GUANGZHOU("ap-guangzhou"),
+        SHANGHAI("ap-shanghai"),
+        CHENGDU("ap-chengdu"),
+        NANJING("ap-nanjing"),
+        CHONGQING("ap-chongqing"),
+        HONGKONG("ap-hongkong"),
+        SILICONVALLEY("na-siliconvalley"),
+        ASHBURN("na-ashburn"),
+        SINGAPORE("ap-singapore"),
+        BANGKOK("ap-bangkok"),
+        FRANKFURT("eu-frankfurt"),
+        TOKYO("ap-tokyo"),
+        SEOUL("ap-seoul"),
+        JAKARTA("ap-jakarta"),
+        SAOPAULO("sa-saopaulo"),
+        SHENZHEN_FSI("ap-shenzhen-fsi"),
+        SHANGHAI_FSI("ap-shanghai-fsi"),
+        BEIJING_FSI("ap-beijing-fsi"),
+        SHANGHAI_ADC("ap-shanghai-adc");
+
+        private final String endpointPrefix;
+
+        Region(String endpointPrefix) {
+            this.endpointPrefix = endpointPrefix;
+        }
+
+        public String toString() {
+            return endpointPrefix;
+        }
+
+        public String getEndpointPrefix() {
+            return endpointPrefix;
+        }
+
+    }
+
+    public enum NetworkType{
+        Intranet("cls.tencentyun.com"),
+        Extranet("cls.tencentcs.com");
+
+        private final String endpointSuffix;
+
+        NetworkType(String endpointPrefix) {
+            this.endpointSuffix = endpointPrefix;
+        }
+
+        public String toString() {
+            return endpointSuffix;
+        }
+
+        public String getEndpointSuffix() {
+            return endpointSuffix;
+        }
+    }
+
     public static int CONST_MAX_PUT_SIZE = 1 * 1024 * 1024;
     public static final String CONST_X_SLS_COMPRESSTYPE = "x-cls-compress-type";
     public static final String CONST_LZ4 = "lz4";

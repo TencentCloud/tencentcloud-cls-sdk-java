@@ -1,8 +1,6 @@
 package com.tencentcloudapi.cls.producer;
 
 import com.tencentcloudapi.cls.producer.common.Constants;
-import com.tencentcloudapi.cls.producer.common.NetworkTypeToDomainMap;
-import com.tencentcloudapi.cls.producer.common.RegionToDomainMap;
 import com.tencentcloudapi.cls.producer.util.Args;
 import com.tencentcloudapi.cls.producer.util.NetworkUtils;
 
@@ -57,10 +55,14 @@ public class AsyncProducerConfig {
      * @param region 地域
      * @param networkType 网络类型
      */
-    public AsyncProducerConfig(String endpoint, @Nonnull String secretId, @Nonnull String secretKey, String sourceIp, String region, String networkType)  {
-        if (!Args.isNotNullOrEmpty(endpoint)) {
-            Args.notNullOrEmpty(region, "endpoint or region");
-            Args.notNullOrEmpty(networkType, "endpoint or network type");
+    public AsyncProducerConfig(String endpoint, @Nonnull String secretId, @Nonnull String secretKey, String sourceIp, Constants.Region region, Constants.NetworkType networkType)   {
+        if (region == null) {
+            Args.notNullOrEmpty(endpoint, "endpoint/region");
+        }
+        if (networkType == null) {
+            Args.notNullOrEmpty(endpoint, "endpoint/network type");
+        }
+        if (Args.isNullOrEmpty(endpoint)) {
             endpoint = getEndpointByRegionAndNetworkType(region, networkType);
         }
         Args.notNullOrEmpty(secretId, "secretId");
@@ -345,15 +347,7 @@ public class AsyncProducerConfig {
         this.maxRetryBackoffMs = maxRetryBackoffMs;
     }
 
-    public String getEndpointByRegionAndNetworkType(String region, String networkType) {
-        String endpointPrefix = RegionToDomainMap.getRegionToDomainMap().get(region);
-        if (endpointPrefix == null) {
-            throw new IllegalArgumentException("[" + region + "] not exist!");
-        }
-        String endpointSuffix = NetworkTypeToDomainMap.getNetworkTypeToDomainMap().get(networkType);
-        if (endpointSuffix == null) {
-            throw new IllegalArgumentException("[" + networkType + "] not exist!");
-        }
-        return endpointPrefix + "." + endpointSuffix;
+    public String getEndpointByRegionAndNetworkType(Constants.Region region, Constants.NetworkType networkType) {
+        return region.getEndpointPrefix() + "." + networkType.getEndpointSuffix();
     }
 }
