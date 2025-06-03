@@ -30,32 +30,41 @@ public class Constants {
         }
     }
 
-    public enum Region {
-        BEIJING("ap-beijing"),
-        GUANGZHOU("ap-guangzhou"),
-        SHANGHAI("ap-shanghai"),
-        CHENGDU("ap-chengdu"),
-        NANJING("ap-nanjing"),
-        CHONGQING("ap-chongqing"),
-        HONGKONG("ap-hongkong"),
-        SILICONVALLEY("na-siliconvalley"),
-        ASHBURN("na-ashburn"),
-        SINGAPORE("ap-singapore"),
-        BANGKOK("ap-bangkok"),
-        FRANKFURT("eu-frankfurt"),
-        TOKYO("ap-tokyo"),
-        SEOUL("ap-seoul"),
-        JAKARTA("ap-jakarta"),
-        SAOPAULO("sa-saopaulo"),
-        SHENZHEN_FSI("ap-shenzhen-fsi"),
-        SHANGHAI_FSI("ap-shanghai-fsi"),
-        BEIJING_FSI("ap-beijing-fsi"),
-        SHANGHAI_ADC("ap-shanghai-adc");
+    public static class Region {
+        public static final Region BEIJING = new Region("ap-beijing");
+        public static final Region GUANGZHOU = new Region("ap-guangzhou");
+        public static final Region SHANGHAI = new Region("ap-shanghai");
+        public static final Region CHENGDU = new Region("ap-chengdu");
+        public static final Region NANJING = new Region("ap-nanjing");
+        public static final Region CHONGQING = new Region("ap-chongqing");
+        public static final Region HONGKONG = new Region("ap-hongkong");
+        public static final Region SILICONVALLEY = new Region("na-siliconvalley");
+        public static final Region ASHBURN = new Region("na-ashburn");
+        public static final Region SINGAPORE = new Region("ap-singapore");
+        public static final Region BANGKOK = new Region("ap-bangkok");
+        public static final Region FRANKFURT = new Region("eu-frankfurt");
+        public static final Region TOKYO = new Region("ap-tokyo");
+        public static final Region SEOUL = new Region("ap-seoul");
+        public static final Region JAKARTA = new Region("ap-jakarta");
+        public static final Region SAOPAULO = new Region("sa-saopaulo");
+        public static final Region SHENZHEN_FSI = new Region("ap-shenzhen-fsi");
+        public static final Region SHANGHAI_FSI = new Region("ap-shanghai-fsi");
+        public static final Region BEIJING_FSI = new Region("ap-beijing-fsi");
+        public static final Region SHANGHAI_ADC = new Region("ap-shanghai-adc");
 
         private final String endpointPrefix;
 
-        Region(String endpointPrefix) {
+        public Region(String endpointPrefix) {
             this.endpointPrefix = endpointPrefix;
+        }
+
+        /**
+         * 支持自定义地域
+         * @param endpointPrefix
+         * @return
+         */
+        public static Region of(String endpointPrefix) {
+            return new Region(endpointPrefix);
         }
 
         public String toString() {

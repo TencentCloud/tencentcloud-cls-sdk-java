@@ -48,6 +48,83 @@ public class AsyncProducerConfig {
 
     /**
      * New Async Client Config
+     * @param endpoint tencent cloud cls endpoint
+     * @param secretId tencent cloud secretId
+     * @param secretKey tencent cloud secretKey
+     * @param sourceIp 本机ip，
+     */
+    public AsyncProducerConfig(@Nonnull String endpoint, @Nonnull String secretId, @Nonnull String secretKey, String sourceIp) {
+        Args.notNullOrEmpty(endpoint, "endpoint");
+        Args.notNullOrEmpty(secretId, "secretId");
+        Args.notNullOrEmpty(secretKey, "secretKey");
+        if (endpoint.startsWith("http://")) {
+            this.hostName = endpoint.substring(7);
+            this.httpType = "http://";
+        } else if (endpoint.startsWith("https://")) {
+            this.hostName = endpoint.substring(8);
+            this.httpType = "https://";
+        } else {
+            this.hostName = endpoint;
+            this.httpType = "http://";
+        }
+        while (this.hostName.endsWith("/")) {
+            this.hostName = this.hostName.substring(0, this.hostName.length() - 1);
+        }
+        if (NetworkUtils.isIPAddr(this.hostName)) {
+            throw new IllegalArgumentException("EndpointInvalid", new Exception("The ip address is not supported"));
+        }
+
+        this.secretId = secretId;
+        this.secretKey = secretKey;
+        this.sourceIp = sourceIp;
+        if (sourceIp == null || sourceIp.isEmpty()) {
+            this.sourceIp = NetworkUtils.getLocalMachineIP();
+        }
+    }
+
+    /**
+     * New Async Client Config
+     * @param endpoint tencent cloud cls endpoint
+     * @param secretId tencent cloud secretId
+     * @param secretKey tencent cloud secretKey
+     * @param sourceIp 本机ip，
+     */
+    public AsyncProducerConfig(@Nonnull String endpoint, @Nonnull String secretId, @Nonnull String secretKey, String sourceIp, String secretToken) {
+        Args.notNullOrEmpty(endpoint, "endpoint");
+        Args.notNullOrEmpty(secretId, "secretId");
+        Args.notNullOrEmpty(secretKey, "secretKey");
+        if (endpoint.startsWith("http://")) {
+            this.hostName = endpoint.substring(7);
+            this.httpType = "http://";
+        } else if (endpoint.startsWith("https://")) {
+            this.hostName = endpoint.substring(8);
+            this.httpType = "https://";
+        } else {
+            this.hostName = endpoint;
+            this.httpType = "http://";
+        }
+        while (this.hostName.endsWith("/")) {
+            this.hostName = this.hostName.substring(0, this.hostName.length() - 1);
+        }
+        if (NetworkUtils.isIPAddr(this.hostName)) {
+            throw new IllegalArgumentException("EndpointInvalid", new Exception("The ip address is not supported"));
+        }
+
+        this.secretId = secretId;
+        this.secretKey = secretKey;
+        this.sourceIp = sourceIp;
+        if (sourceIp == null || sourceIp.isEmpty()) {
+            this.sourceIp = NetworkUtils.getLocalMachineIP();
+        }
+
+        this.secretToken = secretToken;
+        if (null == this.secretToken || this.secretToken.isEmpty()) {
+            this.secretToken = "";
+        }
+    }
+
+    /**
+     * New Async Client Config
      * @param endpoint tencent cloud cls endpoint 如果不为空，使用该值；如果为空，则根据region和networkType自动获取
      * @param secretId tencent cloud secretId
      * @param secretKey tencent cloud secretKey
@@ -56,10 +133,10 @@ public class AsyncProducerConfig {
      * @param networkType 网络类型
      */
     public AsyncProducerConfig(String endpoint, @Nonnull String secretId, @Nonnull String secretKey, String sourceIp, Constants.Region region, Constants.NetworkType networkType)   {
-        if (region == null) {
+        if (null == region) {
             Args.notNullOrEmpty(endpoint, "endpoint/region");
         }
-        if (networkType == null) {
+        if (null == networkType) {
             Args.notNullOrEmpty(endpoint, "endpoint/network type");
         }
         if (Args.isNullOrEmpty(endpoint)) {
@@ -103,10 +180,10 @@ public class AsyncProducerConfig {
      * @param networkType 网络类型
      */
     public AsyncProducerConfig(@Nonnull String endpoint, @Nonnull String secretId, @Nonnull String secretKey, String sourceIp, String secretToken, Constants.Region region, Constants.NetworkType networkType) {
-        if (region == null) {
+        if (null == region) {
             Args.notNullOrEmpty(endpoint, "endpoint/region");
         }
-        if (networkType == null) {
+        if (null == networkType) {
             Args.notNullOrEmpty(endpoint, "endpoint/network type");
         }
         if (Args.isNullOrEmpty(endpoint)) {
