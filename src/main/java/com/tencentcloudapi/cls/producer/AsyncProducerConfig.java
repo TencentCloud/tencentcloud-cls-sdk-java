@@ -179,7 +179,7 @@ public class AsyncProducerConfig {
      * @param region 地域
      * @param networkType 网络类型
      */
-    public AsyncProducerConfig(@Nonnull String endpoint, @Nonnull String secretId, @Nonnull String secretKey, String sourceIp, String secretToken, Constants.Region region, Constants.NetworkType networkType) {
+    public AsyncProducerConfig(String endpoint, @Nonnull String secretId, @Nonnull String secretKey, String sourceIp, String secretToken, Constants.Region region, Constants.NetworkType networkType) {
         if (null == region) {
             Args.notNullOrEmpty(endpoint, "endpoint/region");
         }
