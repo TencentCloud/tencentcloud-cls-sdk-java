@@ -78,8 +78,8 @@ public class Constants {
     }
 
     public enum NetworkType{
-        Intranet("cls.tencentyun.com"),
-        Extranet("cls.tencentcs.com");
+        Intranet("cls.tencentyun.com"), //内网
+        Extranet("cls.tencentcs.com");  //外网
 
         private final String endpointSuffix;
 
