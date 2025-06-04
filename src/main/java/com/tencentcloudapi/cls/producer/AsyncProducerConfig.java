@@ -125,23 +125,20 @@ public class AsyncProducerConfig {
 
     /**
      * New Async Client Config
-     * @param endpoint tencent cloud cls endpoint 如果不为空，使用该值；如果为空，则根据region和networkType自动获取
      * @param secretId tencent cloud secretId
      * @param secretKey tencent cloud secretKey
      * @param sourceIp 本机ip，
      * @param region 地域
      * @param networkType 网络类型
      */
-    public AsyncProducerConfig(String endpoint, @Nonnull String secretId, @Nonnull String secretKey, String sourceIp, Constants.Region region, Constants.NetworkType networkType)   {
+    public AsyncProducerConfig(@Nonnull String secretId, @Nonnull String secretKey, String sourceIp, Constants.Region region, Constants.NetworkType networkType)   {
         if (null == region) {
-            Args.notNullOrEmpty(endpoint, "endpoint/region");
+            throw new IllegalArgumentException("[ region ] must not be null!");
         }
         if (null == networkType) {
-            Args.notNullOrEmpty(endpoint, "endpoint/network type");
+            throw new IllegalArgumentException("[ network type ] must not be null!");
         }
-        if (Args.isNullOrEmpty(endpoint)) {
-            endpoint = getEndpointByRegionAndNetworkType(region, networkType);
-        }
+        String endpoint = getEndpointByRegionAndNetworkType(region, networkType);
         Args.notNullOrEmpty(secretId, "secretId");
         Args.notNullOrEmpty(secretKey, "secretKey");
         if (endpoint.startsWith("http://")) {
@@ -171,7 +168,6 @@ public class AsyncProducerConfig {
 
     /**
      * New Async Client Config
-     * @param endpoint tencent cloud cls endpoint
      * @param secretId tencent cloud secretId
      * @param secretKey tencent cloud secretKey
      * @param sourceIp 本机ip，
@@ -179,16 +175,14 @@ public class AsyncProducerConfig {
      * @param region 地域
      * @param networkType 网络类型
      */
-    public AsyncProducerConfig(String endpoint, @Nonnull String secretId, @Nonnull String secretKey, String sourceIp, String secretToken, Constants.Region region, Constants.NetworkType networkType) {
+    public AsyncProducerConfig(@Nonnull String secretId, @Nonnull String secretKey, String sourceIp, String secretToken, Constants.Region region, Constants.NetworkType networkType) {
         if (null == region) {
-            Args.notNullOrEmpty(endpoint, "endpoint/region");
+            throw new IllegalArgumentException("[ region ] must not be null!");
         }
         if (null == networkType) {
-            Args.notNullOrEmpty(endpoint, "endpoint/network type");
+            throw new IllegalArgumentException("[ network type ] must not be null!");
         }
-        if (Args.isNullOrEmpty(endpoint)) {
-            endpoint = getEndpointByRegionAndNetworkType(region, networkType);
-        }
+        String endpoint = getEndpointByRegionAndNetworkType(region, networkType);
         Args.notNullOrEmpty(secretId, "secretId");
         Args.notNullOrEmpty(secretKey, "secretKey");
         if (endpoint.startsWith("http://")) {
