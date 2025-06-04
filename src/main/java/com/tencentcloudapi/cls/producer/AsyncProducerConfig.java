@@ -132,12 +132,8 @@ public class AsyncProducerConfig {
      * @param networkType 网络类型
      */
     public AsyncProducerConfig(@Nonnull String secretId, @Nonnull String secretKey, String sourceIp, Constants.Region region, Constants.NetworkType networkType)   {
-        if (null == region) {
-            throw new IllegalArgumentException("[ region ] must not be null!");
-        }
-        if (null == networkType) {
-            throw new IllegalArgumentException("[ network type ] must not be null!");
-        }
+        Args.notNull(region, "region");
+        Args.notNull(networkType, "networkType");
         String endpoint = getEndpointByRegionAndNetworkType(region, networkType);
         Args.notNullOrEmpty(secretId, "secretId");
         Args.notNullOrEmpty(secretKey, "secretKey");
@@ -176,12 +172,8 @@ public class AsyncProducerConfig {
      * @param networkType 网络类型
      */
     public AsyncProducerConfig(@Nonnull String secretId, @Nonnull String secretKey, String sourceIp, String secretToken, Constants.Region region, Constants.NetworkType networkType) {
-        if (null == region) {
-            throw new IllegalArgumentException("[ region ] must not be null!");
-        }
-        if (null == networkType) {
-            throw new IllegalArgumentException("[ network type ] must not be null!");
-        }
+        Args.notNull(region, "region");
+        Args.notNull(networkType, "networkType");
         String endpoint = getEndpointByRegionAndNetworkType(region, networkType);
         Args.notNullOrEmpty(secretId, "secretId");
         Args.notNullOrEmpty(secretKey, "secretKey");
