@@ -41,11 +41,4 @@ public final class Args {
             throw new IllegalArgumentException("Invalid duration: " + duration, ex);
         }
     }
-
-    public static boolean isNullOrEmpty(final String value) {
-        if (value == null || value.isEmpty()) {
-            return true;
-        }
-        return false;
-    }
 }
