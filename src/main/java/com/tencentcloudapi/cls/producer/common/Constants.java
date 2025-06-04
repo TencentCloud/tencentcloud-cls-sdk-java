@@ -30,6 +30,9 @@ public class Constants {
         }
     }
 
+    /**
+     * 地域
+     */
     public static class Region {
         public static final Region BEIJING = new Region("ap-beijing");
         public static final Region GUANGZHOU = new Region("ap-guangzhou");
@@ -77,6 +80,9 @@ public class Constants {
 
     }
 
+    /**
+     * 网络类型
+     */
     public enum NetworkType{
         Intranet("cls.tencentyun.com"), //内网
         Extranet("cls.tencentcs.com");  //外网

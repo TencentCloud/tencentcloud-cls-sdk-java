@@ -421,6 +421,12 @@ public class AsyncProducerConfig {
         this.maxRetryBackoffMs = maxRetryBackoffMs;
     }
 
+    /**
+     * 根据地域和网络类型获取对应的endpoint
+     * @param region
+     * @param networkType
+     * @return
+     */
     public String getEndpointByRegionAndNetworkType(Constants.Region region, Constants.NetworkType networkType) {
         return region.getEndpointPrefix() + "." + networkType.getEndpointSuffix();
     }
