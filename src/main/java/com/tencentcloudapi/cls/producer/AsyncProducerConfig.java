@@ -124,6 +124,90 @@ public class AsyncProducerConfig {
     }
 
     /**
+     * New Async Client Config
+     * @param secretId tencent cloud secretId
+     * @param secretKey tencent cloud secretKey
+     * @param sourceIp 本机ip，
+     * @param region 地域
+     * @param networkType 网络类型
+     */
+    public AsyncProducerConfig(@Nonnull String secretId, @Nonnull String secretKey, String sourceIp, Constants.Region region, Constants.NetworkType networkType)   {
+        Args.notNull(region, "region");
+        Args.notNull(networkType, "networkType");
+        String endpoint = getEndpointByRegionAndNetworkType(region, networkType);
+        Args.notNullOrEmpty(secretId, "secretId");
+        Args.notNullOrEmpty(secretKey, "secretKey");
+        if (endpoint.startsWith("http://")) {
+            this.hostName = endpoint.substring(7);
+            this.httpType = "http://";
+        } else if (endpoint.startsWith("https://")) {
+            this.hostName = endpoint.substring(8);
+            this.httpType = "https://";
+        } else {
+            this.hostName = endpoint;
+            this.httpType = "http://";
+        }
+        while (this.hostName.endsWith("/")) {
+            this.hostName = this.hostName.substring(0, this.hostName.length() - 1);
+        }
+        if (NetworkUtils.isIPAddr(this.hostName)) {
+            throw new IllegalArgumentException("EndpointInvalid", new Exception("The ip address is not supported"));
+        }
+
+        this.secretId = secretId;
+        this.secretKey = secretKey;
+        this.sourceIp = sourceIp;
+        if (sourceIp == null || sourceIp.isEmpty()) {
+            this.sourceIp = NetworkUtils.getLocalMachineIP();
+        }
+    }
+
+    /**
+     * New Async Client Config
+     * @param secretId tencent cloud secretId
+     * @param secretKey tencent cloud secretKey
+     * @param sourceIp 本机ip，
+     * @param secretToken
+     * @param region 地域
+     * @param networkType 网络类型
+     */
+    public AsyncProducerConfig(@Nonnull String secretId, @Nonnull String secretKey, String sourceIp, String secretToken, Constants.Region region, Constants.NetworkType networkType) {
+        Args.notNull(region, "region");
+        Args.notNull(networkType, "networkType");
+        String endpoint = getEndpointByRegionAndNetworkType(region, networkType);
+        Args.notNullOrEmpty(secretId, "secretId");
+        Args.notNullOrEmpty(secretKey, "secretKey");
+        if (endpoint.startsWith("http://")) {
+            this.hostName = endpoint.substring(7);
+            this.httpType = "http://";
+        } else if (endpoint.startsWith("https://")) {
+            this.hostName = endpoint.substring(8);
+            this.httpType = "https://";
+        } else {
+            this.hostName = endpoint;
+            this.httpType = "http://";
+        }
+        while (this.hostName.endsWith("/")) {
+            this.hostName = this.hostName.substring(0, this.hostName.length() - 1);
+        }
+        if (NetworkUtils.isIPAddr(this.hostName)) {
+            throw new IllegalArgumentException("EndpointInvalid", new Exception("The ip address is not supported"));
+        }
+
+        this.secretId = secretId;
+        this.secretKey = secretKey;
+        this.sourceIp = sourceIp;
+        if (sourceIp == null || sourceIp.isEmpty()) {
+            this.sourceIp = NetworkUtils.getLocalMachineIP();
+        }
+
+        this.secretToken = secretToken;
+        if (null == this.secretToken || this.secretToken.isEmpty()) {
+            this.secretToken = "";
+        }
+    }
+
+    /**
      * 获取Http Type
      * @return string
      */
@@ -335,5 +419,15 @@ public class AsyncProducerConfig {
                     "maxRetryBackoffMs must be greater than 0, got " + maxRetryBackoffMs);
         }
         this.maxRetryBackoffMs = maxRetryBackoffMs;
+    }
+
+    /**
+     * 根据地域和网络类型获取对应的endpoint
+     * @param region
+     * @param networkType
+     * @return
+     */
+    public String getEndpointByRegionAndNetworkType(Constants.Region region, Constants.NetworkType networkType) {
+        return region.getEndpointPrefix() + "." + networkType.getEndpointSuffix();
     }
 }
