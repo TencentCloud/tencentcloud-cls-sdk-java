@@ -109,7 +109,7 @@ public class SendProducer {
      * @return URI
      */
     private URI getHostURI() {
-        String endPointUrl = producerConfig.getHttpType() + producerConfig.getHostName();
+        String endPointUrl = producerConfig.getHttpType() + producerConfig.getHostNameWithPolarisInfo();
         try {
             return new URI(endPointUrl);
         } catch (URISyntaxException e) {
