@@ -219,13 +219,14 @@ public class AsyncProducerConfig {
      * @param secretKey tencent cloud secretKey
      * @param sourceIp 本机ip，
      */
-    public AsyncProducerConfig(@Nonnull String endpoint, @Nonnull String secretId, @Nonnull String secretKey, String sourceIp,
-                               Constants.PolarisNamespace namespace, Constants.PolarisService service) {
-        Args.notNullOrEmpty(endpoint, "endpoint");
+    public AsyncProducerConfig(@Nonnull String secretId, @Nonnull String secretKey, String sourceIp,
+                               Constants.PolarisNamespace namespace, Constants.Region region, Constants.NetworkType networkType) {
+        Args.notNull(region, "region");
+        Args.notNull(networkType, "networkType");
+        Args.notNull(namespace, "namespace");
+        String endpoint = getEndpointByRegionAndNetworkType(region, networkType);
         Args.notNullOrEmpty(secretId, "secretId");
         Args.notNullOrEmpty(secretKey, "secretKey");
-        Args.notNull(namespace, "namespace");
-        Args.notNull(service, "service");
         if (endpoint.startsWith("http://")) {
             this.hostName = endpoint.substring(7);
             this.httpType = "http://";
@@ -249,8 +250,8 @@ public class AsyncProducerConfig {
         if (sourceIp == null || sourceIp.isEmpty()) {
             this.sourceIp = NetworkUtils.getLocalMachineIP();
         }
-        this.polarisNamespace = namespace.toString();
-        this.polarisService = service.toString();
+        this.polarisNamespace = namespace.getNamespace();
+        this.polarisService = region.getPolarisService();
     }
 
     /**

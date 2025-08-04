@@ -34,31 +34,33 @@ public class Constants {
      * 地域
      */
     public static class Region {
-        public static final Region BEIJING = new Region("ap-beijing");
-        public static final Region GUANGZHOU = new Region("ap-guangzhou");
-        public static final Region SHANGHAI = new Region("ap-shanghai");
-        public static final Region CHENGDU = new Region("ap-chengdu");
-        public static final Region NANJING = new Region("ap-nanjing");
-        public static final Region CHONGQING = new Region("ap-chongqing");
-        public static final Region HONGKONG = new Region("ap-hongkong");
-        public static final Region SILICONVALLEY = new Region("na-siliconvalley");
-        public static final Region ASHBURN = new Region("na-ashburn");
-        public static final Region SINGAPORE = new Region("ap-singapore");
-        public static final Region BANGKOK = new Region("ap-bangkok");
-        public static final Region FRANKFURT = new Region("eu-frankfurt");
-        public static final Region TOKYO = new Region("ap-tokyo");
-        public static final Region SEOUL = new Region("ap-seoul");
-        public static final Region JAKARTA = new Region("ap-jakarta");
-        public static final Region SAOPAULO = new Region("sa-saopaulo");
-        public static final Region SHENZHEN_FSI = new Region("ap-shenzhen-fsi");
-        public static final Region SHANGHAI_FSI = new Region("ap-shanghai-fsi");
-        public static final Region BEIJING_FSI = new Region("ap-beijing-fsi");
-        public static final Region SHANGHAI_ADC = new Region("ap-shanghai-adc");
+        public static final Region BEIJING = new Region("ap-beijing", null);
+        public static final Region GUANGZHOU = new Region("ap-guangzhou", "cls-ap-guangzhou-dataflow");
+        public static final Region SHANGHAI = new Region("ap-shanghai", null);
+        public static final Region CHENGDU = new Region("ap-chengdu", null);
+        public static final Region NANJING = new Region("ap-nanjing", null);
+        public static final Region CHONGQING = new Region("ap-chongqing", null);
+        public static final Region HONGKONG = new Region("ap-hongkong", null);
+        public static final Region SILICONVALLEY = new Region("na-siliconvalley", null);
+        public static final Region ASHBURN = new Region("na-ashburn", null);
+        public static final Region SINGAPORE = new Region("ap-singapore", null);
+        public static final Region BANGKOK = new Region("ap-bangkok", null);
+        public static final Region FRANKFURT = new Region("eu-frankfurt", null);
+        public static final Region TOKYO = new Region("ap-tokyo", null);
+        public static final Region SEOUL = new Region("ap-seoul", null);
+        public static final Region JAKARTA = new Region("ap-jakarta", null);
+        public static final Region SAOPAULO = new Region("sa-saopaulo", null);
+        public static final Region SHENZHEN_FSI = new Region("ap-shenzhen-fsi", null);
+        public static final Region SHANGHAI_FSI = new Region("ap-shanghai-fsi", null);
+        public static final Region BEIJING_FSI = new Region("ap-beijing-fsi", null);
+        public static final Region SHANGHAI_ADC = new Region("ap-shanghai-adc", null);
 
         private final String endpointPrefix;
+        private final String polarisService;
 
-        public Region(String endpointPrefix) {
+        public Region(String endpointPrefix, String polarisService) {
             this.endpointPrefix = endpointPrefix;
+            this.polarisService = polarisService;
         }
 
         /**
@@ -66,18 +68,21 @@ public class Constants {
          * @param endpointPrefix
          * @return
          */
-        public static Region of(String endpointPrefix) {
-            return new Region(endpointPrefix);
+        public static Region of(String endpointPrefix, String polarisService) {
+            return new Region(endpointPrefix, polarisService);
         }
 
         public String toString() {
-            return endpointPrefix;
+            return endpointPrefix + ":" + (polarisService == null ? "" : polarisService);
         }
 
         public String getEndpointPrefix() {
             return endpointPrefix;
         }
 
+        public String getPolarisService() {
+            return polarisService;
+        }
     }
 
     /**
@@ -103,23 +108,6 @@ public class Constants {
     }
 
     /**
-     * polaris接入点service-按地域分
-     */
-    public static class PolarisService {
-        public static final PolarisService Guangzhou = new PolarisService("cls-ap-guangzhou-dataflow");
-
-        private final String service;
-
-        public PolarisService(String service) {
-            this.service = service;
-        }
-
-        public String toString() {
-            return service;
-        }
-    }
-
-    /**
      * polaris接入点namespace
      */
     public static class PolarisNamespace {
@@ -132,6 +120,10 @@ public class Constants {
         }
 
         public String toString() {
+            return namespace;
+        }
+
+        public String getNamespace() {
             return namespace;
         }
     }
