@@ -64,6 +64,11 @@
       <artifactId>lz4-java</artifactId>
       <version>1.8.0</version>
     </dependency>
+    <dependency>
+      <groupId>com.tencent.nameservice</groupId>
+      <artifactId>polaris-factory-shaded</artifactId>
+      <version>3.3.8</version>
+    </dependency>
   </dependencies>
 
   <build>

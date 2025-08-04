@@ -102,6 +102,40 @@ public class Constants {
         }
     }
 
+    /**
+     * polaris接入点service-按地域分
+     */
+    public static class PolarisService {
+        public static final PolarisService Guangzhou = new PolarisService("cls-ap-guangzhou-dataflow");
+
+        private final String service;
+
+        public PolarisService(String service) {
+            this.service = service;
+        }
+
+        public String toString() {
+            return service;
+        }
+    }
+
+    /**
+     * polaris接入点namespace
+     */
+    public static class PolarisNamespace {
+        public static final PolarisNamespace Production = new PolarisNamespace("Production");
+
+        private final String namespace;
+
+        public PolarisNamespace(String namespace) {
+            this.namespace = namespace;
+        }
+
+        public String toString() {
+            return namespace;
+        }
+    }
+
     public static int CONST_MAX_PUT_SIZE = 1 * 1024 * 1024;
     public static final String CONST_X_SLS_COMPRESSTYPE = "x-cls-compress-type";
     public static final String CONST_LZ4 = "lz4";
