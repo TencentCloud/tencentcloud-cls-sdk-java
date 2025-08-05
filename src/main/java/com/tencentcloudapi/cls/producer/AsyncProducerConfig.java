@@ -219,37 +219,24 @@ public class AsyncProducerConfig {
      * @param secretKey tencent cloud secretKey
      * @param sourceIp 本机ip，
      */
+    public AsyncProducerConfig(@Nonnull String secretId, @Nonnull String secretKey, String sourceIp, String secretToken,
+                               Constants.PolarisNamespace namespace, Constants.Region region, Constants.NetworkType networkType) {
+        this(secretId, secretKey, sourceIp, secretToken, region, networkType);
+        Args.notNull(namespace, "namespace");
+        this.polarisNamespace = namespace.getNamespace();
+        this.polarisService = region.getPolarisService();
+    }
+
+    /**
+     * 通过polaris接入点上传到cls
+     * @param secretId tencent cloud secretId
+     * @param secretKey tencent cloud secretKey
+     * @param sourceIp 本机ip，
+     */
     public AsyncProducerConfig(@Nonnull String secretId, @Nonnull String secretKey, String sourceIp,
                                Constants.PolarisNamespace namespace, Constants.Region region, Constants.NetworkType networkType) {
-        Args.notNull(region, "region");
-        Args.notNull(networkType, "networkType");
+        this(secretId, secretKey, sourceIp, region, networkType);
         Args.notNull(namespace, "namespace");
-        String endpoint = getEndpointByRegionAndNetworkType(region, networkType);
-        Args.notNullOrEmpty(secretId, "secretId");
-        Args.notNullOrEmpty(secretKey, "secretKey");
-        if (endpoint.startsWith("http://")) {
-            this.hostName = endpoint.substring(7);
-            this.httpType = "http://";
-        } else if (endpoint.startsWith("https://")) {
-            this.hostName = endpoint.substring(8);
-            this.httpType = "https://";
-        } else {
-            this.hostName = endpoint;
-            this.httpType = "http://";
-        }
-        while (this.hostName.endsWith("/")) {
-            this.hostName = this.hostName.substring(0, this.hostName.length() - 1);
-        }
-        if (NetworkUtils.isIPAddr(this.hostName)) {
-            throw new IllegalArgumentException("EndpointInvalid", new Exception("The ip address is not supported"));
-        }
-
-        this.secretId = secretId;
-        this.secretKey = secretKey;
-        this.sourceIp = sourceIp;
-        if (sourceIp == null || sourceIp.isEmpty()) {
-            this.sourceIp = NetworkUtils.getLocalMachineIP();
-        }
         this.polarisNamespace = namespace.getNamespace();
         this.polarisService = region.getPolarisService();
     }
