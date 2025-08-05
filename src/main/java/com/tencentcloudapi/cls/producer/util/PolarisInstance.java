@@ -6,7 +6,7 @@ import com.tencent.polaris.api.rpc.GetOneInstanceRequest;
 import com.tencent.polaris.api.rpc.InstancesResponse;
 import com.tencent.polaris.factory.api.DiscoveryAPIFactory;
 
-public class InstanceUtils {
+public class PolarisInstance {
 
     private static final ConsumerAPI consumerAPI = DiscoveryAPIFactory.createConsumerAPI();
 

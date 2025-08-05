@@ -4,7 +4,7 @@ import com.tencent.polaris.api.pojo.Instance;
 import com.tencentcloudapi.cls.producer.common.Constants;
 import com.tencentcloudapi.cls.producer.util.Args;
 import com.tencentcloudapi.cls.producer.util.NetworkUtils;
-import com.tencentcloudapi.cls.producer.util.InstanceUtils;
+import com.tencentcloudapi.cls.producer.util.PolarisInstance;
 
 import javax.annotation.Nonnull;
 
@@ -275,7 +275,7 @@ public class AsyncProducerConfig {
      */
     public String getHostNameWithPolarisInfo() {
         if (this.polarisNamespace != null && this.polarisService != null) {
-            Instance instance = InstanceUtils.getOneInstance(this.polarisNamespace, this.polarisService);
+            Instance instance = PolarisInstance.getOneInstance(this.polarisNamespace, this.polarisService);
             return  instance.getHost() + ":" + instance.getPort();
         }
         return  this.hostName;
