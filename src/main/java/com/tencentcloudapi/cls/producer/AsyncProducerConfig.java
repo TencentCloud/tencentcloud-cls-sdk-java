@@ -1,8 +1,10 @@
 package com.tencentcloudapi.cls.producer;
 
+import com.tencent.polaris.api.pojo.Instance;
 import com.tencentcloudapi.cls.producer.common.Constants;
 import com.tencentcloudapi.cls.producer.util.Args;
 import com.tencentcloudapi.cls.producer.util.NetworkUtils;
+import com.tencentcloudapi.cls.producer.util.PolarisInstance;
 
 import javax.annotation.Nonnull;
 
@@ -25,6 +27,10 @@ public class AsyncProducerConfig {
     private String sourceIp;
 
     private String topicId;
+
+    private String polarisNamespace;
+
+    private String polarisService;
 
     private int totalSizeInBytes = Constants.DEFAULT_TOTAL_SIZE_IN_BYTES;
 
@@ -208,6 +214,34 @@ public class AsyncProducerConfig {
     }
 
     /**
+     * 通过polaris接入点上传到cls
+     * @param secretId tencent cloud secretId
+     * @param secretKey tencent cloud secretKey
+     * @param sourceIp 本机ip，
+     */
+    public AsyncProducerConfig(@Nonnull String secretId, @Nonnull String secretKey, String sourceIp, String secretToken,
+                               Constants.PolarisNamespace namespace, Constants.Region region, Constants.NetworkType networkType) {
+        this(secretId, secretKey, sourceIp, secretToken, region, networkType);
+        Args.notNull(namespace, "namespace");
+        this.polarisNamespace = namespace.getNamespace();
+        this.polarisService = region.getPolarisService();
+    }
+
+    /**
+     * 通过polaris接入点上传到cls
+     * @param secretId tencent cloud secretId
+     * @param secretKey tencent cloud secretKey
+     * @param sourceIp 本机ip，
+     */
+    public AsyncProducerConfig(@Nonnull String secretId, @Nonnull String secretKey, String sourceIp,
+                               Constants.PolarisNamespace namespace, Constants.Region region, Constants.NetworkType networkType) {
+        this(secretId, secretKey, sourceIp, region, networkType);
+        Args.notNull(namespace, "namespace");
+        this.polarisNamespace = namespace.getNamespace();
+        this.polarisService = region.getPolarisService();
+    }
+
+    /**
      * 获取Http Type
      * @return string
      */
@@ -221,6 +255,17 @@ public class AsyncProducerConfig {
      */
     public String getHostName() {
         return this.hostName;
+    }
+
+    /**
+     * 根据Polaris信息获取Host Name
+     */
+    public String getHostNameWithPolarisInfo() {
+        if (this.polarisNamespace != null && this.polarisService != null) {
+            Instance instance = PolarisInstance.getOneInstance(this.polarisNamespace, this.polarisService);
+            return  instance.getHost() + ":" + instance.getPort();
+        }
+        return  this.hostName;
     }
 
     /**

@@ -1,13 +1,15 @@
 package com.tencentcloudapi.cls.producer.http.client;
 
 import com.tencentcloudapi.cls.producer.common.Constants;
+import com.tencentcloudapi.cls.producer.http.comm.OkHttpClientInstance;
 import com.tencentcloudapi.cls.producer.http.comm.RequestMessage;
 import com.tencentcloudapi.cls.producer.http.utils.HttpUtil;
 import com.tencentcloudapi.cls.producer.response.PutLogsResponse;
+import okhttp3.MediaType;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
-import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.Map;
 
 /**
@@ -16,29 +18,23 @@ import java.util.Map;
 public class Sender {
     public static PutLogsResponse doPost(RequestMessage requestMessage) throws Exception {
         PutLogsResponse resp;
-        HttpURLConnection connection;
-        OutputStream outputStream;
-        URL url = new URL(buildUri(requestMessage));
-        connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestMethod(requestMessage.getMethod().toString());
-        connection.setConnectTimeout(Constants.HTTP_CONNECT_TIME_OUT);
-        connection.setReadTimeout(Constants.HTTP_SEND_TIME_OUT);
-        connection.setDoOutput(true);
-        connection.setDoInput(true);
-
         // connection.setRequestProperty("connection", "Keep-Alive");
+        RequestBody body = RequestBody.create(
+                requestMessage.getContent(),
+                MediaType.parse(Constants.CONST_PROTO_BUF));
+        Request.Builder requestBuilder = new Request.Builder()
+                .url(buildUri(requestMessage))
+                .method(requestMessage.getMethod().toString(), body);
+        requestBuilder.header("User-Agent", "cls-java-sdk-1.0.8");
         for (Map.Entry<String, String> entry : requestMessage.getHeaders().entrySet()) {
-            connection.setRequestProperty(entry.getKey(), entry.getValue());
+            requestBuilder.header(entry.getKey(), entry.getValue());
         }
-        connection.setRequestProperty("User-Agent", "cls-java-sdk-1.0.8");
 
-        outputStream = connection.getOutputStream();
-        outputStream.write(requestMessage.getContent());
-
-        resp = new PutLogsResponse(connection.getHeaderFields());
-        resp.SetHttpStatusCode(connection.getResponseCode());
-
-        outputStream.close();
+        Request request = requestBuilder.build();
+        try (Response response = OkHttpClientInstance.okHttpClient.newCall(request).execute()) {
+            resp = new PutLogsResponse(response.headers().toMultimap());
+            resp.SetHttpStatusCode(response.code());
+        }
         return resp;
     }
 
