@@ -123,14 +123,14 @@ public class SendProducerBatchTask implements Runnable {
         }
         switch (response.GetHttpStatusCode()) {
             case 200: return response;
-            case 500: throw new LogException(response.GetHttpStatusCode(), ErrorCodes.BAD_RESPONSE, "internal server error", requestId);
-            case 429: throw new LogException(response.GetHttpStatusCode(), ErrorCodes.SpeedQuotaExceed, "speed quota exceed", requestId);
-            case 413: throw new LogException(response.GetHttpStatusCode(), ErrorCodes.ContentIsTooLarge, "content is too large", requestId);
-            case 404: throw new LogException(response.GetHttpStatusCode(), ErrorCodes.TopicNotExists, "topic not exists", requestId);
-            case 403: throw new LogException(response.GetHttpStatusCode(), ErrorCodes.SingleValueExceed1M, "single log value exceed 1M", requestId);
-            case 401: throw new LogException(response.GetHttpStatusCode(), ErrorCodes.AuthFailure, "auth failed", requestId);
-            case 400: throw new LogException(response.GetHttpStatusCode(), ErrorCodes.InvalidParam, "invalid param", requestId);
-            default: throw new LogException(response.GetHttpStatusCode(), ErrorCodes.BAD_RESPONSE, response.GetAllHeaders().toString(), requestId);
+            case 500: throw new LogException(response.GetHttpStatusCode(), ErrorCodes.BAD_RESPONSE, "internal server error", requestId, response.GetResponseBody());
+            case 429: throw new LogException(response.GetHttpStatusCode(), ErrorCodes.SpeedQuotaExceed, "speed quota exceed", requestId, response.GetResponseBody());
+            case 413: throw new LogException(response.GetHttpStatusCode(), ErrorCodes.ContentIsTooLarge, "content is too large", requestId, response.GetResponseBody());
+            case 404: throw new LogException(response.GetHttpStatusCode(), ErrorCodes.TopicNotExists, "topic not exists", requestId, response.GetResponseBody());
+            case 403: throw new LogException(response.GetHttpStatusCode(), ErrorCodes.SingleValueExceed1M, "single log value exceed 1M", requestId, response.GetResponseBody());
+            case 401: throw new LogException(response.GetHttpStatusCode(), ErrorCodes.AuthFailure, "auth failed", requestId, response.GetResponseBody());
+            case 400: throw new LogException(response.GetHttpStatusCode(), ErrorCodes.InvalidParam, "invalid param", requestId, response.GetResponseBody());
+            default: throw new LogException(response.GetHttpStatusCode(), ErrorCodes.BAD_RESPONSE, response.GetAllHeaders().toString(), requestId, response.GetResponseBody());
         }
     }
 
@@ -208,7 +208,8 @@ public class SendProducerBatchTask implements Runnable {
                     logException.GetRequestId(),
                     logException.GetErrorCode(),
                     logException.GetErrorMessage(),
-                    nowMs);
+                    nowMs,
+                    logException.GetResponseBody());
         } else {
             return new Attempt(false, "", ErrorCodes.BAD_RESPONSE, e.getMessage(), nowMs);
         }

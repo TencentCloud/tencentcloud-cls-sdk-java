@@ -15,12 +15,24 @@ public class Attempt {
 
     private final long timestampMs;
 
+    private final String responseBody;
+
     public Attempt(boolean success, String requestId, String errorCode, String errorMessage, long timestampMs) {
         this.success = success;
         this.requestId = requestId;
         this.errorCode = errorCode;
         this.errorMessage = errorMessage;
         this.timestampMs = timestampMs;
+        this.responseBody = "";
+    }
+
+    public Attempt(boolean success, String requestId, String errorCode, String errorMessage, long timestampMs, String responseBody) {
+        this.success = success;
+        this.requestId = requestId;
+        this.errorCode = errorCode;
+        this.errorMessage = errorMessage;
+        this.timestampMs = timestampMs;
+        this.responseBody = responseBody;
     }
 
     public boolean isSuccess() {
@@ -44,6 +56,8 @@ public class Attempt {
         return timestampMs;
     }
 
+    public String getResponseBody() {return responseBody;}
+
     @Override
     public String toString() {
         return "Attempt{"
@@ -60,6 +74,9 @@ public class Attempt {
                 + '\''
                 + ", timestampMs="
                 + timestampMs
+                + ", responseBody='"
+                + responseBody
+                + '\''
                 + '}';
     }
 }
