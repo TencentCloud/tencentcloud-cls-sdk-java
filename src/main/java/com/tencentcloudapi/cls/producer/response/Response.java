@@ -18,6 +18,7 @@ public class Response implements Serializable {
 	private static final long serialVersionUID = 7331835262124313824L;
 	private Map<String, List<String>> mHeaders = new HashMap<>();
 	private Integer httpStatusCode = 0;
+	private String responseBody;
 
 	/**
 	 * Construct the base response body with http headers
@@ -95,6 +96,22 @@ public class Response implements Serializable {
 	 */
 	public Map<String, List<String>> GetAllHeaders() {
 		return mHeaders;
+	}
+
+	/**
+	 * Get http body
+	 * @return http response body
+	 */
+	public String GetResponseBody() {
+		return responseBody;
+	}
+
+	/**
+	 * Set http body
+	 * @param body http response body
+	 */
+	public void SetResponseBody(String body) {
+		responseBody = body;
 	}
 
 }
