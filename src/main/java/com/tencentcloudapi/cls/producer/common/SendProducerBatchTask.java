@@ -119,7 +119,7 @@ public class SendProducerBatchTask implements Runnable {
                 requestId = response.GetRequestId();
             }
         } catch (Exception e) {
-            throw new LogException(ErrorCodes.SendFailed, e.getMessage());
+            throw new LogException(ErrorCodes.SendFailed, e.toString());
         }
         switch (response.GetHttpStatusCode()) {
             case 200: return response;
