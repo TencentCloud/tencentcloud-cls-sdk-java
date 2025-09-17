@@ -31,7 +31,7 @@ public class Attempt {
         this.requestId = requestId;
         this.errorCode = errorCode;
         this.timestampMs = timestampMs;
-        if(!Objects.equals(responseBody, "")) {
+        if(null != responseBody && !responseBody.isEmpty()) {
             this.errorMessage = responseBody;
         } else {
             this.errorMessage = errorMessage;
