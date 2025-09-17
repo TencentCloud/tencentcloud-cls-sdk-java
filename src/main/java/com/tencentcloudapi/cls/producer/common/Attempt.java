@@ -1,5 +1,7 @@
 package com.tencentcloudapi.cls.producer.common;
 
+
+
 /**
  * @author farmerx
  */
@@ -21,6 +23,18 @@ public class Attempt {
         this.errorCode = errorCode;
         this.errorMessage = errorMessage;
         this.timestampMs = timestampMs;
+    }
+
+    public Attempt(boolean success, String requestId, String errorCode, String errorMessage, long timestampMs, String responseBody) {
+        this.success = success;
+        this.requestId = requestId;
+        this.errorCode = errorCode;
+        this.timestampMs = timestampMs;
+        if(null != responseBody && !responseBody.isEmpty()) {
+            this.errorMessage = responseBody;
+        } else {
+            this.errorMessage = errorMessage;
+        }
     }
 
     public boolean isSuccess() {

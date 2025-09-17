@@ -8,6 +8,7 @@ import com.tencentcloudapi.cls.producer.response.PutLogsResponse;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 /**
@@ -18,6 +19,7 @@ public class Sender {
         PutLogsResponse resp;
         HttpURLConnection connection;
         OutputStream outputStream;
+        InputStream inputStream; // 输入流，用于接收响应
         URL url = new URL(buildUri(requestMessage));
         connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod(requestMessage.getMethod().toString());
@@ -36,10 +38,45 @@ public class Sender {
         outputStream.write(requestMessage.getContent());
 
         resp = new PutLogsResponse(connection.getHeaderFields());
-        resp.SetHttpStatusCode(connection.getResponseCode());
+        int statusCode = connection.getResponseCode();
+        resp.SetHttpStatusCode(statusCode);
 
+        if (statusCode >= 200 && statusCode < 300) {
+            inputStream = connection.getInputStream();// 请求成功，从 getInputStream() 读取
+        } else {
+            inputStream = connection.getErrorStream();// 请求失败，从 getErrorStream() 读取
+            if (inputStream == null) { // 如果未返回错误流，则使用输入流
+                inputStream = connection.getInputStream();
+            }
+        }
+        String responseBody = readInputStream(inputStream);
+        resp.SetResponseBody(responseBody);
+
+        inputStream.close();
         outputStream.close();
+
         return resp;
+    }
+
+    /**
+     * 从输入流中读取ResponseBody
+     * @param inputStream 输入流
+     * @return 读取到的字符串内容
+     */
+    private static String readInputStream(InputStream inputStream) {
+        if (inputStream == null) {
+            return "";
+        }
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
+            StringBuilder responseBuilder = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                responseBuilder.append(line);
+            }
+            return responseBuilder.toString();
+        } catch (Exception e) {
+            return "";
+        }
     }
 
     /**
