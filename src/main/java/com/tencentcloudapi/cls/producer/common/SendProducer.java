@@ -85,12 +85,14 @@ public class SendProducer {
         String requestId = "";
         try {
             response = Sender.doPost(requestMessage);
-            if (response !=null) {
+            if (response != null) {
                 requestId = response.GetRequestId();
             }
         } catch (Exception e) {
+            System.out.println("cls sdk producer send logs error: " + e.getMessage());
             throw new LogException(ErrorCodes.SendFailed, e.getMessage());
         }
+        System.out.println("cls sdk producer send logs" );
         switch (response.GetHttpStatusCode()) {
             case 200: return response;
             case 500: throw new LogException(response.GetHttpStatusCode(), ErrorCodes.BAD_RESPONSE, "internal server error", requestId);
@@ -144,6 +146,7 @@ public class SendProducer {
                     logException.GetErrorMessage(),
                     nowMs);
         } else {
+            System.out.println("cls sdk producer send attempt error: " + e.getMessage());
             return new Attempt(false, "", ErrorCodes.BAD_RESPONSE, e.getMessage(), nowMs);
         }
     }
