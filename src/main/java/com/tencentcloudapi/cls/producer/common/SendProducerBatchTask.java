@@ -121,6 +121,7 @@ public class SendProducerBatchTask implements Runnable {
         } catch (Exception e) {
             throw new LogException(ErrorCodes.SendFailed, e.toString());
         }
+        System.out.println("cls java sdk exception: sendLogs");
         switch (response.GetHttpStatusCode()) {
             case 200: return response;
             case 500: throw new LogException(response.GetHttpStatusCode(), ErrorCodes.BAD_RESPONSE, "internal server error", requestId, response.GetResponseBody());
@@ -177,6 +178,8 @@ public class SendProducerBatchTask implements Runnable {
             batch.appendAttempt(attempt);
             successQueue.put(batch);
         } catch (Exception e) {
+            System.out.println("cls java sdk exception: " + e.getMessage());
+            e.printStackTrace();
             String requestId = "";
             if (response !=null) {
                 requestId = response.GetRequestId();
@@ -211,7 +214,8 @@ public class SendProducerBatchTask implements Runnable {
                     nowMs,
                     logException.GetResponseBody());
         } else {
-            return new Attempt(false, "", ErrorCodes.BAD_RESPONSE, e.getMessage(), nowMs);
+            System.out.println("cls java sdk buildAttempt exception: " + e.getMessage());
+            return new Attempt(false, requestId, ErrorCodes.BAD_RESPONSE, e.getMessage(), nowMs);
         }
     }
 
