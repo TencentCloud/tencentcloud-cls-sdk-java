@@ -100,6 +100,7 @@ public class SendProducerBatchTask implements Runnable {
         } catch (UnsupportedEncodingException e) {
             throw new LogException(ErrorCodes.ENCODING_EXCEPTION, e.getMessage());
         }
+        System.out.println("cls java sdk sendProducerBatch 7");
         headParameter.put(Constants.CONST_AUTHORIZATION, signature);
         headParameter.put("x-cls-compress-type", "lz4");
 
@@ -113,11 +114,14 @@ public class SendProducerBatchTask implements Runnable {
         RequestMessage requestMessage = buildRequest(uri, urlParameter, headParameter, compressedData, compressedData.length);
         PutLogsResponse response;
         String requestId = "";
+        System.out.println("cls java sdk sendProducerBatch 8");
         try {
+            System.out.println("cls java sdk sendProducerBatch 9");
             response = Sender.doPost(requestMessage);
             if (response !=null) {
                 requestId = response.GetRequestId();
             }
+            System.out.println("cls java sdk sendProducerBatch 10");
         } catch (Exception e) {
             throw new LogException(ErrorCodes.SendFailed, e.toString());
         }
@@ -168,12 +172,18 @@ public class SendProducerBatchTask implements Runnable {
     private void sendProducerBatch(long nowMs) throws InterruptedException {
         PutLogsResponse response = null;
         try {
+            System.out.println("cls java sdk sendProducerBatch 1");
             PutLogsRequest request = buildPutLogsRequest(batch);
+            System.out.println("cls java sdk sendProducerBatch 2");
             Map<String, String> headParameter = getCommonHeadPara();
+            System.out.println("cls java sdk sendProducerBatch 3");
             request.SetParam(Constants.TOPIC_ID, request.GetTopic());
+            System.out.println("cls java sdk sendProducerBatch 4");
             Map<String, String> urlParameter = request.GetAllParams();
+            System.out.println("cls java sdk sendProducerBatch 5");
             byte[] logBytes = request.GetLogGroupBytes(producerConfig.getSourceIp(), batch.getPackageId());
             response = sendLogs(urlParameter, headParameter, logBytes);
+            System.out.println("cls java sdk sendProducerBatch 6");
             Attempt attempt = new Attempt(true, response.GetRequestId(), "", "", nowMs);
             batch.appendAttempt(attempt);
             successQueue.put(batch);
@@ -184,6 +194,7 @@ public class SendProducerBatchTask implements Runnable {
             if (response !=null) {
                 requestId = response.GetRequestId();
             }
+
             Attempt attempt = buildAttempt(e, nowMs, requestId);
             batch.appendAttempt(attempt);
             if (meetFailureCondition(e)) {
@@ -214,7 +225,6 @@ public class SendProducerBatchTask implements Runnable {
                     nowMs,
                     logException.GetResponseBody());
         } else {
-            System.out.println("cls java sdk buildAttempt exception: " + e.getMessage());
             return new Attempt(false, requestId, ErrorCodes.BAD_RESPONSE, e.getMessage(), nowMs);
         }
     }
