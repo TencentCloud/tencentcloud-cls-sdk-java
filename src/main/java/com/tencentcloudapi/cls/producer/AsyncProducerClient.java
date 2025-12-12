@@ -153,6 +153,7 @@ public class AsyncProducerClient {
      * @throws LogException
      */
     public Result putLogs(String topicId, List<LogItem> logItems) throws ProducerException, LogException {
+        System.out.println("call cls sdk put logs");
         checkParam(topicId, logItems);
         return this.sendProducer.sendProducer(System.currentTimeMillis(), topicId, logItems);
     }
