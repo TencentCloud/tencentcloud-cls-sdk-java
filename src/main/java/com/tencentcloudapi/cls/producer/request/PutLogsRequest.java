@@ -120,10 +120,14 @@ public class PutLogsRequest extends Request {
 		Logs.LogGroupList.Builder grpList = Logs.LogGroupList.newBuilder();
 		this.mlogItems.setFilename(this.mFilename);
 		this.mlogItems.setContextFlow(PackageId);
-		System.out.println("cls java sdk sendProducerBatch GetLogGroupBytes 6");
+		System.out.println("cls java sdk sendProducerBatch GetLogGroupBytes 6: "+  this.mSource);
 		if (null == this.mSource || this.mSource.isEmpty()) {
-			this.mlogItems.setSource(sourceIp);
+			System.out.println("cls java sdk sendProducerBatch GetLogGroupBytes 8 " + sourceIp);
+			if (null != sourceIp) {
+				this.mlogItems.setSource(sourceIp);
+			}
 		} else {
+			System.out.println("cls java sdk sendProducerBatch GetLogGroupBytes 9");
 			this.mlogItems.setSource(this.mSource);
 		}
 		System.out.println("cls java sdk sendProducerBatch GetLogGroupBytes 7");
