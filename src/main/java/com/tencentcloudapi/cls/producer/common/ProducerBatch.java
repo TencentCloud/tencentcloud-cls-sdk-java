@@ -64,6 +64,7 @@ public class ProducerBatch implements Delayed {
     }
 
     public String getPackageId() {
+        System.out.println("cls java sdk sendProducerBatch getPackageId 5");
         return packageId;
     }
 

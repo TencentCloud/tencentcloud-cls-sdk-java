@@ -116,16 +116,17 @@ public class PutLogsRequest extends Request {
 	 * @return logGroupBytes
 	 */
 	public byte[] GetLogGroupBytes(String sourceIp, String PackageId) {
+		System.out.println("cls java sdk sendProducerBatch GetLogGroupBytes 5");
 		Logs.LogGroupList.Builder grpList = Logs.LogGroupList.newBuilder();
 		this.mlogItems.setFilename(this.mFilename);
 		this.mlogItems.setContextFlow(PackageId);
-
+		System.out.println("cls java sdk sendProducerBatch GetLogGroupBytes 6");
 		if (this.mSource == null || this.mSource.isEmpty()) {
 			this.mlogItems.setSource(sourceIp);
 		} else {
 			this.mlogItems.setSource(this.mSource);
 		}
-
+		System.out.println("cls java sdk sendProducerBatch GetLogGroupBytes 7");
 		return grpList.addLogGroupList(this.mlogItems).build().toByteArray();
 	}
 

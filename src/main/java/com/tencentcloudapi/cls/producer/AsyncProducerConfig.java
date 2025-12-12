@@ -266,6 +266,7 @@ public class AsyncProducerConfig {
      * @return string
      */
     public String getSourceIp() {
+        System.out.println("cls java sdk sendProducerBatch getSourceIp 5");
         return this.sourceIp;
     }
 
