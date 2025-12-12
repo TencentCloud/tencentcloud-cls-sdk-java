@@ -121,7 +121,7 @@ public class PutLogsRequest extends Request {
 		this.mlogItems.setFilename(this.mFilename);
 		this.mlogItems.setContextFlow(PackageId);
 		System.out.println("cls java sdk sendProducerBatch GetLogGroupBytes 6");
-		if (this.mSource == null || this.mSource.isEmpty()) {
+		if (null == this.mSource || this.mSource.isEmpty()) {
 			this.mlogItems.setSource(sourceIp);
 		} else {
 			this.mlogItems.setSource(this.mSource);
